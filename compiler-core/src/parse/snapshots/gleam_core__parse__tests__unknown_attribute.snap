@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "@go_faster()\npub fn main() { 1 }"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 @go_faster()

@@ -1,0 +1,32 @@
+---
+source: compiler-core/src/go/tests/bools.rs
+expression: "pub fn negate(x) {\n    panic && x\n}"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn negate(x) {
+    panic && x
+}
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Negate(x gleam_P.Bool_t) gleam_P.Bool_t {
+  return (func() gleam_P.Bool_t {
+    panic(gleam_P.MakeError(
+      "panic",
+      "my/mod",
+      2,
+      "negate",
+      "`panic` expression evaluated.",
+      map[string]any{},
+    ))
+  })() && x
+}

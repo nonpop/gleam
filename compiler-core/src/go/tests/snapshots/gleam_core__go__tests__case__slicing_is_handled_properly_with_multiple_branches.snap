@@ -1,0 +1,42 @@
+---
+source: compiler-core/src/go/tests/case.rs
+expression: "\npub fn main() {\n  case \"12345\" {\n    \"0\" <> rest -> rest\n    \"123\" <> rest -> rest\n    _ -> \"\"\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn main() {
+  case "12345" {
+    "0" <> rest -> rest
+    "123" <> rest -> rest
+    _ -> ""
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  "strings"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main() gleam_P.String_t {
+  var _a gleam_P.String_t = "12345"
+  _ = _a
+  if gleam_P.Bool_t(strings.HasPrefix(string(_a), "0")) {
+    var rest gleam_P.String_t = _a[1:]
+    _ = rest
+    return rest
+  } else if gleam_P.Bool_t(strings.HasPrefix(string(_a), "123")) {
+    var rest gleam_P.String_t = _a[3:]
+    _ = rest
+    return rest
+  } else {
+    return ""
+  }
+}

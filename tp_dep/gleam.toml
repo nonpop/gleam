@@ -1,0 +1,5 @@
+name = "wobble"
+target = "go"
+
+[dependencies]
+wibble = { path = "../tp_dep2" }

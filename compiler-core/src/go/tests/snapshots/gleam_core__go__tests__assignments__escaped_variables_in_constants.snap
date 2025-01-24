@@ -1,0 +1,24 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "\nconst func = 5\nconst something = func\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+const func = 5
+const something = func
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var funcʹ gleam_P.Int_t = 5
+
+var something gleam_P.Int_t = funcʹ

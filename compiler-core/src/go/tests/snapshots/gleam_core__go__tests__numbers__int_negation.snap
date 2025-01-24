@@ -1,0 +1,30 @@
+---
+source: compiler-core/src/go/tests/numbers.rs
+expression: "\nfn go() {\n  let a = 3\n  let b = -a\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  let a = 3
+  let b = -a
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.Int_t {
+  var a gleam_P.Int_t = 3
+  _ = a
+  var b gleam_P.Int_t = - a
+  _ = b
+  return b
+}

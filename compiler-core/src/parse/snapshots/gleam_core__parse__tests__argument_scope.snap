@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\n1 + let a = 5\na\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

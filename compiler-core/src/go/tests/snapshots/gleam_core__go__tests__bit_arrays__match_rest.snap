@@ -1,0 +1,39 @@
+---
+source: compiler-core/src/go/tests/bit_arrays.rs
+expression: "\nfn go(x) {\n  let assert <<_, b:bytes>> = <<1,2,3>>\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x) {
+  let assert <<_, b:bytes>> = <<1,2,3>>
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[I gleam_P.Type[I]](x I) gleam_P.BitArray_t {
+  var _a gleam_P.BitArray_t = gleam_P.ToBitArray([]byte{1}, []byte{2}, []byte{3})
+  _ = _a
+  if !(len(_a) >= 1) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      3,
+      "go",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": _a },
+    ))
+  }
+  var b gleam_P.BitArray_t = _a.SliceAfter(1)
+  _ = b
+  return _a
+}

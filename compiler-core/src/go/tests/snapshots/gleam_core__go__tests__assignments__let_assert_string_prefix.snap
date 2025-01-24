@@ -1,0 +1,40 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "\npub fn main() {\n  let assert \"Game \" <> id = \"Game 1\"\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn main() {
+  let assert "Game " <> id = "Game 1"
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  "strings"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main() gleam_P.String_t {
+  var _a gleam_P.String_t = "Game 1"
+  _ = _a
+  if gleam_P.Bool_t(!strings.HasPrefix(string(_a), "Game ")) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      3,
+      "main",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": _a },
+    ))
+  }
+  var id gleam_P.String_t = _a[5:]
+  _ = id
+  return _a
+}

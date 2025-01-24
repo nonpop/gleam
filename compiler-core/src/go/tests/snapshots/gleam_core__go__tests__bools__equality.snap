@@ -1,0 +1,41 @@
+---
+source: compiler-core/src/go/tests/bools.rs
+expression: "\nfn go(a, b) {\n  a == True\n  a != True\n  a == False\n  a != False\n  a == a\n  a != a\n  b == Nil\n  b != Nil\n  b == b\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(a, b) {
+  a == True
+  a != True
+  a == False
+  a != False
+  a == a
+  a != a
+  b == Nil
+  b != Nil
+  b == b
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ(a gleam_P.Bool_t, b gleam_P.Nil_t) gleam_P.Bool_t {
+  _ = gleam_P.Bool_t(a.Equal(true))
+  _ = gleam_P.Bool_t(!a.Equal(true))
+  _ = gleam_P.Bool_t(a.Equal(false))
+  _ = gleam_P.Bool_t(!a.Equal(false))
+  _ = gleam_P.Bool_t(a.Equal(a))
+  _ = gleam_P.Bool_t(!a.Equal(a))
+  _ = gleam_P.Bool_t(b.Equal(gleam_P.Nil_c{}))
+  _ = gleam_P.Bool_t(!b.Equal(gleam_P.Nil_c{}))
+  return gleam_P.Bool_t(b.Equal(b))
+}

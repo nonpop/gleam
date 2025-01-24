@@ -1,11 +1,12 @@
 ---
 source: compiler-core/src/parse/tests.rs
-expression: "\n@external(erlang, \"module\", \"fun\")\npub type Fun\n"
+expression: "\n@external(erlang, \"module\", \"fun\")\npub const wibble = 1\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 
 @external(erlang, "module", "fun")
-pub type Fun
+pub const wibble = 1
 
 
 ----- ERROR
@@ -13,4 +14,4 @@ error: Syntax error
   ┌─ /src/parse/error.gleam:2:1
   │
 2 │ @external(erlang, "module", "fun")
-  │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ I was expecting a function definition after this
+  │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ I was expecting a function or type definition after this

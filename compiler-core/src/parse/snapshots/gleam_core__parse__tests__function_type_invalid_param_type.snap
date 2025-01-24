@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\nfn f(g: fn(Int, 1) -> Int) -> Int {\n  g(0, 1)\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

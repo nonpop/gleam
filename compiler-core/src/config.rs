@@ -99,6 +99,8 @@ pub struct PackageConfig {
     pub erlang: ErlangConfig,
     #[serde(default)]
     pub javascript: JavaScriptConfig,
+    #[serde(default)]
+    pub go: GoConfig,
     #[serde(default = "erlang_target")]
     pub target: Target,
     #[serde(default)]
@@ -574,6 +576,7 @@ impl Default for PackageConfig {
             dependencies: Default::default(),
             erlang: Default::default(),
             javascript: Default::default(),
+            go: Default::default(),
             repository: Default::default(),
             dev_dependencies: Default::default(),
             licences: Default::default(),
@@ -601,6 +604,9 @@ pub struct JavaScriptConfig {
     #[serde(default, rename = "deno")]
     pub deno: DenoConfig,
 }
+
+#[derive(Deserialize, Debug, PartialEq, Default, Clone)]
+pub struct GoConfig {}
 
 #[derive(Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum DenoFlag {

@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: const implement = 1
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 const implement = 1

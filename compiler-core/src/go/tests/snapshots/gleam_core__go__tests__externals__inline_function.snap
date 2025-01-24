@@ -1,0 +1,23 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+assertion_line: 262
+expression: "\n@external(go, \"blah\", \"func(x int) { return x}\")\npub fn one(x: Int) -> Int {\n  1\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "blah", "func(x int) { return x}")
+pub fn one(x: Int) -> Int {
+  1
+}
+
+
+----- ERROR
+error: Invalid Go function
+  ┌─ /src/one/two.gleam:3:1
+  │
+3 │ pub fn one(x: Int) -> Int {
+  │ ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The function `one` has an external Go implementation but the function name
+`func(x int) { return x}` is not valid.

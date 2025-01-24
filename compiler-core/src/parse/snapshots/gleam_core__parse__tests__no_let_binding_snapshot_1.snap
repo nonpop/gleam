@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: wibble = 4
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 wibble = 4

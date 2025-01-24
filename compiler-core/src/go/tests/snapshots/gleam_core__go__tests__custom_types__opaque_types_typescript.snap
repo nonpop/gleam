@@ -1,0 +1,74 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "pub opaque type Animal {\n  Cat(goes_outside: Bool)\n  Dog(plays_fetch: Bool)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub opaque type Animal {
+  Cat(goes_outside: Bool)
+  Dog(plays_fetch: Bool)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type Animal_t interface{
+  iAnimal_t()
+  isCat() gleam_P.Bool_t
+  asCat() cat_c
+  isDog() gleam_P.Bool_t
+  asDog() dog_c
+  gleam_P.Type[Animal_t]
+}
+
+type cat_c struct {goesOutside gleam_P.Bool_t}
+
+func (cat_c) iAnimal_t() {}
+
+func (cat_c) isCat() gleam_P.Bool_t { return true }
+func (c cat_c) asCat() cat_c { return c }
+
+func (cat_c) isDog() gleam_P.Bool_t { return false }
+func (c cat_c) asDog() dog_c { panic("expected Dog value") }
+
+func (c cat_c) Hash() uint32 { return gleam_P.HashConstructor(0, 
+  c.goesOutside.Hash(),
+) }
+func (c cat_c) Equal(o Animal_t) bool {
+  if o, ok := o.(cat_c); ok {
+    _ = o
+    if !c.goesOutside.Equal(o.goesOutside) { return false }
+    return true
+  }
+  return false
+}
+
+type dog_c struct {playsFetch gleam_P.Bool_t}
+
+func (dog_c) iAnimal_t() {}
+
+func (dog_c) isCat() gleam_P.Bool_t { return false }
+func (c dog_c) asCat() cat_c { panic("expected Cat value") }
+
+func (dog_c) isDog() gleam_P.Bool_t { return true }
+func (c dog_c) asDog() dog_c { return c }
+
+func (c dog_c) Hash() uint32 { return gleam_P.HashConstructor(1, 
+  c.playsFetch.Hash(),
+) }
+func (c dog_c) Equal(o Animal_t) bool {
+  if o, ok := o.(dog_c); ok {
+    _ = o
+    if !c.playsFetch.Equal(o.playsFetch) { return false }
+    return true
+  }
+  return false
+}

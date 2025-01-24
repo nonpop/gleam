@@ -60,7 +60,7 @@ impl TypedModule {
     }
 }
 
-/// The `@target(erlang)` and `@target(javascript)` attributes can be used to
+/// The `@target(erlang)` and `@target(javascript)` and `@target(go)` attributes can be used to
 /// mark a definition as only being for a specific target.
 ///
 /// ```gleam
@@ -652,6 +652,7 @@ pub struct Function<T, Expr> {
     pub documentation: Option<(u32, EcoString)>,
     pub external_erlang: Option<(EcoString, EcoString, SrcSpan)>,
     pub external_javascript: Option<(EcoString, EcoString, SrcSpan)>,
+    pub external_go: Option<(EcoString, EcoString, SrcSpan)>,
     pub implementations: Implementations,
 }
 
@@ -762,6 +763,10 @@ pub struct CustomType<T> {
     /// Once type checked this field will contain the type information for the
     /// type parameters.
     pub typed_parameters: Vec<T>,
+    pub external_erlang: Option<(EcoString, EcoString, SrcSpan)>,
+    pub external_javascript: Option<(EcoString, EcoString, SrcSpan)>,
+    pub external_go: Option<(EcoString, EcoString, SrcSpan)>,
+    pub implementations: Implementations,
 }
 
 impl<T> CustomType<T> {

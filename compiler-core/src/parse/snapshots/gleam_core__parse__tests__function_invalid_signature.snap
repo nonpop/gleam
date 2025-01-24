@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\nfn f(a, \"b\") -> String {\n    a <> b\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

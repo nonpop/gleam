@@ -1,0 +1,24 @@
+---
+source: compiler-core/src/go/tests/generics.rs
+expression: "\n    @external(go, \"some/path\", \"Promise\")\n    pub type Promise(value)\n    pub type Task(a) = fn() -> Promise(a)"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+    @external(go, "some/path", "Promise")
+    pub type Promise(value)
+    pub type Task(a) = fn() -> Promise(a)
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  path_P "some/path"
+)
+
+const _ = gleam_P.Use_Import
+const _ = path_P.Use_Import
+const Use_Import byte = 0
+
+type Promise_t[I gleam_P.Type[I]] = path_P.Promise[I]

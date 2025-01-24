@@ -1,0 +1,25 @@
+---
+source: compiler-core/src/go/tests/strings.rs
+expression: "\npub fn y_with_dieresis() -> String {\n  \"\\u{0308}y\"\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn y_with_dieresis() -> String {
+  "\u{0308}y"
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func YWithDieresis() gleam_P.String_t {
+  return "\U00000308y"
+}

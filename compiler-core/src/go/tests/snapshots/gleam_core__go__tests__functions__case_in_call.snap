@@ -1,0 +1,38 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "pub fn main(f, x) {\n  f(case x {\n    1 -> 2\n    _ -> 0\n  })\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main(f, x) {
+  f(case x {
+    1 -> 2
+    _ -> 0
+  })
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main[M gleam_P.Type[M]](
+  f gleam_P.Func1_t[gleam_P.Int_t, M],
+  x gleam_P.Int_t,
+) M {
+  return f(
+    (func() gleam_P.Int_t {
+      if gleam_P.Bool_t(x.Equal(1)) {
+        return 2
+      } else {
+        return 0
+      }
+    })(),
+  )
+}

@@ -1,0 +1,27 @@
+---
+source: compiler-core/src/go/tests/bools.rs
+expression: "\nfn go() {\n    True && True\n    False || False\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+    True && True
+    False || False
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.Bool_t {
+  _ = true && true
+  return false || false
+}

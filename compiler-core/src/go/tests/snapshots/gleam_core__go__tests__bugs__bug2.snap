@@ -1,0 +1,27 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\nimport other\n\nfn id_id() {\n  other.id(other.id)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+import other
+
+fn id_id() {
+  other.id(other.id)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  other_P "example.com/todo/thepackage/other"
+)
+
+const _ = other_P.Use_Import
+const Use_Import byte = 0
+
+func idId[N any]() func(N) N {
+  return other_P.Id[func(N) N](other_P.Id[N])
+}

@@ -1,0 +1,28 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "pub fn main(_, _, _) {\n  1\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main(_, _, _) {
+  1
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main[I gleam_P.Type[I], J gleam_P.Type[J], K gleam_P.Type[K]](
+  _ I,
+  _ J,
+  _ K,
+) gleam_P.Int_t {
+  return 1
+}

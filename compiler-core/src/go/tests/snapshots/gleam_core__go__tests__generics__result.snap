@@ -1,0 +1,37 @@
+---
+source: compiler-core/src/go/tests/generics.rs
+expression: "pub fn map(result, fun) {\n            case result {\n              Ok(a) -> Ok(fun(a))\n              Error(e) -> Error(e)\n            }\n          }"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn map(result, fun) {
+            case result {
+              Ok(a) -> Ok(fun(a))
+              Error(e) -> Error(e)
+            }
+          }
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Map[S gleam_P.Type[S], T gleam_P.Type[T], V gleam_P.Type[V]](
+  result gleam_P.Result_t[T, S],
+  fun gleam_P.Func1_t[T, V],
+) gleam_P.Result_t[V, S] {
+  if result.IsOk() {
+    var a T = result.AsOk().P_0
+    _ = a
+    return gleam_P.Ok_c[V, S]{fun(a)}
+  } else {
+    var e S = result.AsError().P_0
+    _ = e
+    return gleam_P.Error_c[V, S]{e}
+  }
+}

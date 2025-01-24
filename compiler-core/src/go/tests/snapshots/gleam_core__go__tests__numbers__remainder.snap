@@ -1,0 +1,25 @@
+---
+source: compiler-core/src/go/tests/numbers.rs
+expression: "\nfn go() {\n  5 % 0 // => 0\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  5 % 0 // => 0
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.Int_t {
+  return gleam_P.RemainderInt(5, 0)
+}

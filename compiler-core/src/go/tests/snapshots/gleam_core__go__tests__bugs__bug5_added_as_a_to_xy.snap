@@ -1,0 +1,129 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\ntype AB { A B }\ntype XY { X Y }\n\nfn foo(ab, xy) {\n  case ab, xy {\n    A, X -> 1\n    _, _ -> 2\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type AB { A B }
+type XY { X Y }
+
+fn foo(ab, xy) {
+  case ab, xy {
+    A, X -> 1
+    _, _ -> 2
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type ab_t interface{
+  iab_t()
+  isA() gleam_P.Bool_t
+  asA() a_c
+  isB() gleam_P.Bool_t
+  asB() b_c
+  gleam_P.Type[ab_t]
+}
+
+type a_c struct {}
+
+func (a_c) iab_t() {}
+
+func (a_c) isA() gleam_P.Bool_t { return true }
+func (c a_c) asA() a_c { return c }
+
+func (a_c) isB() gleam_P.Bool_t { return false }
+func (c a_c) asB() b_c { panic("expected B value") }
+
+func (c a_c) Hash() uint32 { return gleam_P.HashConstructor(0) }
+func (c a_c) Equal(o ab_t) bool {
+  if o, ok := o.(a_c); ok {
+    _ = o
+    return true
+  }
+  return false
+}
+
+type b_c struct {}
+
+func (b_c) iab_t() {}
+
+func (b_c) isA() gleam_P.Bool_t { return false }
+func (c b_c) asA() a_c { panic("expected A value") }
+
+func (b_c) isB() gleam_P.Bool_t { return true }
+func (c b_c) asB() b_c { return c }
+
+func (c b_c) Hash() uint32 { return gleam_P.HashConstructor(1) }
+func (c b_c) Equal(o ab_t) bool {
+  if o, ok := o.(b_c); ok {
+    _ = o
+    return true
+  }
+  return false
+}
+
+type xy_t interface{
+  ixy_t()
+  isX() gleam_P.Bool_t
+  asX() x_c
+  isY() gleam_P.Bool_t
+  asY() y_c
+  gleam_P.Type[xy_t]
+}
+
+type x_c struct {}
+
+func (x_c) ixy_t() {}
+
+func (x_c) isX() gleam_P.Bool_t { return true }
+func (c x_c) asX() x_c { return c }
+
+func (x_c) isY() gleam_P.Bool_t { return false }
+func (c x_c) asY() y_c { panic("expected Y value") }
+
+func (c x_c) Hash() uint32 { return gleam_P.HashConstructor(0) }
+func (c x_c) Equal(o xy_t) bool {
+  if o, ok := o.(x_c); ok {
+    _ = o
+    return true
+  }
+  return false
+}
+
+type y_c struct {}
+
+func (y_c) ixy_t() {}
+
+func (y_c) isX() gleam_P.Bool_t { return false }
+func (c y_c) asX() x_c { panic("expected X value") }
+
+func (y_c) isY() gleam_P.Bool_t { return true }
+func (c y_c) asY() y_c { return c }
+
+func (c y_c) Hash() uint32 { return gleam_P.HashConstructor(1) }
+func (c y_c) Equal(o xy_t) bool {
+  if o, ok := o.(y_c); ok {
+    _ = o
+    return true
+  }
+  return false
+}
+
+func foo(ab ab_t, xy xy_t) gleam_P.Int_t {
+  if ab.isA() && xy.isX() {
+    return 1
+  } else {
+    return 2
+  }
+}

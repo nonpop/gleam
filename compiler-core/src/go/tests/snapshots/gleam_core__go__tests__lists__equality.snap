@@ -1,0 +1,31 @@
+---
+source: compiler-core/src/go/tests/lists.rs
+expression: "\nfn go() {\n  [] == [1]\n  [] != [1]\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  [] == [1]
+  [] != [1]
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.Bool_t {
+  _ = gleam_P.Bool_t(gleam_P.ToList[gleam_P.Int_t]().Equal(gleam_P.ToList[gleam_P.Int_t](
+    1,
+  )))
+  return gleam_P.Bool_t(!gleam_P.ToList[gleam_P.Int_t]().Equal(gleam_P.ToList[gleam_P.Int_t](
+    1,
+  )))
+}

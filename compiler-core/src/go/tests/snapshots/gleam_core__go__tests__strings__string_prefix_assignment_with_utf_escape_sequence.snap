@@ -1,0 +1,58 @@
+---
+source: compiler-core/src/go/tests/strings.rs
+expression: "\npub fn go(x) {\n  case x {\n    \"\\u{0032} \" as greeting <> name -> greeting\n    \"\\u{0007ff} \" as greeting <> name -> greeting\n    \"\\u{00ffff} \" as greeting <> name -> greeting\n    \"\\u{10ffff} \" as greeting <> name -> greeting\n    _ -> \"Unknown\"\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn go(x) {
+  case x {
+    "\u{0032} " as greeting <> name -> greeting
+    "\u{0007ff} " as greeting <> name -> greeting
+    "\u{00ffff} " as greeting <> name -> greeting
+    "\u{10ffff} " as greeting <> name -> greeting
+    _ -> "Unknown"
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  "strings"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Go(x gleam_P.String_t) gleam_P.String_t {
+  if gleam_P.Bool_t(strings.HasPrefix(string(x), "\U00000032 ")) {
+    var name gleam_P.String_t = x[2:]
+    _ = name
+    var greeting gleam_P.String_t = "\U00000032 "
+    _ = greeting
+    return greeting
+  } else if gleam_P.Bool_t(strings.HasPrefix(string(x), "\U000007ff ")) {
+    var name gleam_P.String_t = x[3:]
+    _ = name
+    var greeting gleam_P.String_t = "\U000007ff "
+    _ = greeting
+    return greeting
+  } else if gleam_P.Bool_t(strings.HasPrefix(string(x), "\U0000ffff ")) {
+    var name gleam_P.String_t = x[4:]
+    _ = name
+    var greeting gleam_P.String_t = "\U0000ffff "
+    _ = greeting
+    return greeting
+  } else if gleam_P.Bool_t(strings.HasPrefix(string(x), "\U0010ffff ")) {
+    var name gleam_P.String_t = x[5:]
+    _ = name
+    var greeting gleam_P.String_t = "\U0010ffff "
+    _ = greeting
+    return greeting
+  } else {
+    return "Unknown"
+  }
+}

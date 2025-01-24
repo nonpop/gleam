@@ -1,0 +1,23 @@
+---
+source: compiler-core/src/go/tests/consts.rs
+expression: pub const a = Ok
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub const a = Ok
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var A gleam_P.Func1_t[gleam_P.Type, gleam_P.Result_t[gleam_P.Type, gleam_P.Type]] = func(
+    P_0 gleam_P.Type,
+  ) gleam_P.Result_t[gleam_P.Type, gleam_P.Type] {
+  return gleam_P.Ok_c[gleam_P.Type, gleam_P.Type]{P_0}
+}

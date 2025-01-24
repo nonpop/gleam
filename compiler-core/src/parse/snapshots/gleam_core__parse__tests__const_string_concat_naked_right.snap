@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\nconst no_cute_bee = \"cute\" <>\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

@@ -1,0 +1,39 @@
+---
+source: compiler-core/src/go/tests/blocks.rs
+expression: "\nfn b() {\n  {\n    use a <- fn(cb) { cb(1) }\n    a\n  }\n  {\n    use b <- fn(cb) { cb(2) }\n    b\n  }\n  3\n}\n    "
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn b() {
+  {
+    use a <- fn(cb) { cb(1) }
+    a
+  }
+  {
+    use b <- fn(cb) { cb(2) }
+    b
+  }
+  3
+}
+    
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func b() gleam_P.Int_t {
+  _ = (func(cb gleam_P.Func1_t[gleam_P.Int_t, gleam_P.Int_t]) gleam_P.Int_t {
+    return cb(1)
+  })(func(a gleam_P.Int_t) gleam_P.Int_t { return a })
+  _ = (func(cb gleam_P.Func1_t[gleam_P.Int_t, gleam_P.Int_t]) gleam_P.Int_t {
+    return cb(2)
+  })(func(b gleam_P.Int_t) gleam_P.Int_t { return b })
+  return 3
+}

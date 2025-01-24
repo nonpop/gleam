@@ -1,0 +1,50 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "\nfn go(x) {\n  let assert #(a, #(b, c, 2) as t, _, 1) = x\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x) {
+  let assert #(a, #(b, c, 2) as t, _, 1) = x
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[
+  K gleam_P.Type[K],
+  M gleam_P.Type[M],
+  O gleam_P.Type[O],
+  P gleam_P.Type[P],
+](
+  x gleam_P.Tuple4_t[K, gleam_P.Tuple3_t[O, P, gleam_P.Int_t], M, gleam_P.Int_t],
+) gleam_P.Tuple4_t[K, gleam_P.Tuple3_t[O, P, gleam_P.Int_t], M, gleam_P.Int_t] {
+  if gleam_P.Bool_t(!x.P_1.P_2.Equal(2)) || gleam_P.Bool_t(!x.P_3.Equal(1)) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      3,
+      "go",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": x },
+    ))
+  }
+  var a K = x.P_0
+  _ = a
+  var t gleam_P.Tuple3_t[O, P, gleam_P.Int_t] = x.P_1
+  _ = t
+  var b O = x.P_1.P_0
+  _ = b
+  var c P = x.P_1.P_1
+  _ = c
+  return x
+}

@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\nfn main() {\n    use fn <- result.try(get_username())\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

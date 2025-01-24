@@ -1,0 +1,37 @@
+---
+source: compiler-core/src/go/tests/case_clause_guards.rs
+expression: "pub fn main() {\n  let x = False\n  let x = True\n  case x {\n    _ if x -> 1\n    _ -> 0\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main() {
+  let x = False
+  let x = True
+  case x {
+    _ if x -> 1
+    _ -> 0
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main() gleam_P.Int_t {
+  var x gleam_P.Bool_t = false
+  _ = x
+  var xʹ1 gleam_P.Bool_t = true
+  _ = xʹ1
+  if xʹ1 {
+    return 1
+  } else {
+    return 0
+  }
+}

@@ -1,0 +1,32 @@
+---
+source: compiler-core/src/go/tests/todo.rs
+expression: "\nfn go() {\n  todo as \"I should do this\"\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  todo as "I should do this"
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[J gleam_P.Type[J]]() J {
+  panic(gleam_P.MakeError(
+    "todo",
+    "my/mod",
+    3,
+    "go",
+    "I should do this",
+    map[string]any{},
+  ))
+}

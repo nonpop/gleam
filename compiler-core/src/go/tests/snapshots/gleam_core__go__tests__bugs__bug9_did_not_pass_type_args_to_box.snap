@@ -1,0 +1,40 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\ntype Box(a) { Box(a) }\n\nconst box = Box(1)\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Box(a) { Box(a) }
+
+const box = Box(1)
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type box_c[I gleam_P.Type[I]] struct {p_0 I}
+
+func (c box_c[I]) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.p_0.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c box_c[I]) Equal(o box_c[I]) bool {
+  _ = o
+  if !c.p_0.Equal(o.p_0) { return false }
+  return true
+}
+
+type box_t[I gleam_P.Type[I]] = box_c[I]
+
+var box box_t[gleam_P.Int_t] = box_c[gleam_P.Int_t]{1}

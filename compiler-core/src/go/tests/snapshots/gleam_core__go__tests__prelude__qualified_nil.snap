@@ -1,0 +1,23 @@
+---
+source: compiler-core/src/go/tests/prelude.rs
+expression: "import gleam\npub fn go() { gleam.Nil }\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+import gleam
+pub fn go() { gleam.Nil }
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Go() gleam_P.Nil_t {
+  return gleam_P.Nil_c{}
+}

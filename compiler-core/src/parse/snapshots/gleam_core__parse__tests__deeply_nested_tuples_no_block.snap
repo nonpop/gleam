@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\nlet tup = #(#(#(#(4))))\ntup.0.0.0.0\n"
+snapshot_kind: text
 ---
 [
     Assignment(

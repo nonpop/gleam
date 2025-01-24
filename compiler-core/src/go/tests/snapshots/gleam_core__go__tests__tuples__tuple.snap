@@ -1,0 +1,33 @@
+---
+source: compiler-core/src/go/tests/tuples.rs
+expression: "\nfn go() {\n  #(\"1\", \"2\", \"3\")\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  #("1", "2", "3")
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.Tuple3_t[
+  gleam_P.String_t,
+  gleam_P.String_t,
+  gleam_P.String_t,
+] {
+  return gleam_P.Tuple3_t[gleam_P.String_t, gleam_P.String_t, gleam_P.String_t]{
+    "1",
+    "2",
+    "3",
+  }
+}

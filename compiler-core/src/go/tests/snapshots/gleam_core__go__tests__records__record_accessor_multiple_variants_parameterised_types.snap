@@ -1,0 +1,104 @@
+---
+source: compiler-core/src/go/tests/records.rs
+expression: "\npub type Person {\n    Teacher(name: String, age: List(Int), title: String)\n    Student(name: String, age: List(Int))\n}\npub fn get_name(person: Person) { person.name }\npub fn get_age(person: Person) { person.age }"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub type Person {
+    Teacher(name: String, age: List(Int), title: String)
+    Student(name: String, age: List(Int))
+}
+pub fn get_name(person: Person) { person.name }
+pub fn get_age(person: Person) { person.age }
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type Person_t interface{
+  iPerson_t()
+  Name_f() gleam_P.String_t
+  Age_f() gleam_P.List_t[gleam_P.Int_t]
+  IsTeacher() gleam_P.Bool_t
+  AsTeacher() Teacher_c
+  IsStudent() gleam_P.Bool_t
+  AsStudent() Student_c
+  gleam_P.Type[Person_t]
+}
+
+type Teacher_c struct {
+  Name gleam_P.String_t
+  Age gleam_P.List_t[gleam_P.Int_t]
+  Title gleam_P.String_t
+}
+
+func (Teacher_c) iPerson_t() {}
+
+func (c Teacher_c) Name_f() gleam_P.String_t { return c.Name }
+
+func (c Teacher_c) Age_f() gleam_P.List_t[gleam_P.Int_t] { return c.Age }
+
+func (Teacher_c) IsTeacher() gleam_P.Bool_t { return true }
+func (c Teacher_c) AsTeacher() Teacher_c { return c }
+
+func (Teacher_c) IsStudent() gleam_P.Bool_t { return false }
+func (c Teacher_c) AsStudent() Student_c { panic("expected Student value") }
+
+func (c Teacher_c) Hash() uint32 { return gleam_P.HashConstructor(0, 
+  c.Name.Hash(),
+  c.Age.Hash(),
+  c.Title.Hash(),
+) }
+func (c Teacher_c) Equal(o Person_t) bool {
+  if o, ok := o.(Teacher_c); ok {
+    _ = o
+    if !c.Name.Equal(o.Name) { return false }
+    if !c.Age.Equal(o.Age) { return false }
+    if !c.Title.Equal(o.Title) { return false }
+    return true
+  }
+  return false
+}
+
+type Student_c struct {Name gleam_P.String_t; Age gleam_P.List_t[gleam_P.Int_t]}
+
+func (Student_c) iPerson_t() {}
+
+func (c Student_c) Name_f() gleam_P.String_t { return c.Name }
+
+func (c Student_c) Age_f() gleam_P.List_t[gleam_P.Int_t] { return c.Age }
+
+func (Student_c) IsTeacher() gleam_P.Bool_t { return false }
+func (c Student_c) AsTeacher() Teacher_c { panic("expected Teacher value") }
+
+func (Student_c) IsStudent() gleam_P.Bool_t { return true }
+func (c Student_c) AsStudent() Student_c { return c }
+
+func (c Student_c) Hash() uint32 { return gleam_P.HashConstructor(1, 
+  c.Name.Hash(),
+  c.Age.Hash(),
+) }
+func (c Student_c) Equal(o Person_t) bool {
+  if o, ok := o.(Student_c); ok {
+    _ = o
+    if !c.Name.Equal(o.Name) { return false }
+    if !c.Age.Equal(o.Age) { return false }
+    return true
+  }
+  return false
+}
+
+func GetName(person Person_t) gleam_P.String_t {
+  return person.Name_f()
+}
+
+func GetAge(person Person_t) gleam_P.List_t[gleam_P.Int_t] {
+  return person.Age_f()
+}

@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: case a
+snapshot_kind: text
 ---
 [
     Expression(

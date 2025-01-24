@@ -1,0 +1,22 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: "\n@external(go, \"\", \"thing_t\")\npub type Thing(a, b)\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "", "thing_t")
+pub type Thing(a, b)
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type Thing_t[I gleam_P.Type[I], J gleam_P.Type[J]] = thing_t[I, J]

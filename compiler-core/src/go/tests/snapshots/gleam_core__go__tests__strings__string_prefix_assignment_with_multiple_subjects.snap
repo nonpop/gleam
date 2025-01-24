@@ -1,0 +1,39 @@
+---
+source: compiler-core/src/go/tests/strings.rs
+expression: "\npub fn go(x) {\n  case x {\n    \"1\" as prefix <> _ | \"11\" as prefix <> _ -> prefix\n    _ -> \"Unknown\"\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn go(x) {
+  case x {
+    "1" as prefix <> _ | "11" as prefix <> _ -> prefix
+    _ -> "Unknown"
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  "strings"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Go(x gleam_P.String_t) gleam_P.String_t {
+  if gleam_P.Bool_t(strings.HasPrefix(string(x), "1")) {
+    var prefix gleam_P.String_t = "1"
+    _ = prefix
+    return prefix
+  } else if gleam_P.Bool_t(strings.HasPrefix(string(x), "11")) {
+    var prefix gleam_P.String_t = "11"
+    _ = prefix
+    return prefix
+  } else {
+    return "Unknown"
+  }
+}

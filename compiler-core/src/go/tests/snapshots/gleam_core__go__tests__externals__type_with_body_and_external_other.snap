@@ -1,0 +1,30 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: "\n@external(javascript, \"some/path\", \"SomeType\")\npub type Thing { Thing }\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(javascript, "some/path", "SomeType")
+pub type Thing { Thing }
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type Thing_c struct {}
+
+func (c Thing_c) Hash() uint32 {return gleam_P.NilHash }
+func (c Thing_c) Equal(o Thing_c) bool {
+  _ = o
+  return true
+}
+
+type Thing_t = Thing_c

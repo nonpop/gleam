@@ -1,0 +1,23 @@
+---
+source: compiler-core/src/go/tests/bit_arrays.rs
+expression: "const a = <<\"hello\", \" \", \"world\">>"
+snapshot_kind: text
+---
+----- SOURCE CODE
+const a = <<"hello", " ", "world">>
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var a gleam_P.BitArray_t = gleam_P.ToBitArray(
+  gleam_P.StringBits("hello"),
+  gleam_P.StringBits(" "),
+  gleam_P.StringBits("world"),
+)

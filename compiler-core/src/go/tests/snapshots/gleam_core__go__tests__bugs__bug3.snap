@@ -1,0 +1,33 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\ntype Phantom(a) { Phantom }\n\nfn phantom() { Phantom }\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Phantom(a) { Phantom }
+
+fn phantom() { Phantom }
+
+
+----- COMPILED GO
+package mod_P
+
+const Use_Import byte = 0
+
+type phantom_t[I any] interface{
+  iphantom_t(I)
+  isPhantom() bool
+  asPhantom() phantom_c[I]
+}
+
+type phantom_c[I any] struct {}
+
+func (phantom_c[I]) iphantom_t(I) {}
+
+func (phantom_c[I]) isPhantom() bool { return true }
+func (c phantom_c[I]) asPhantom() phantom_c[I] { return c }
+
+func phantom[K any]() phantom_t[K] {
+  return phantom_c[K]{}
+}

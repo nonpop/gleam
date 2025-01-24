@@ -1,0 +1,66 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "\npub type Thing {\n  Thing(constructor: Nil)\n}\n\npub fn main() {\n  let a = Thing(constructor: Nil)\n  let Thing(constructor: ctor) = a\n  case a {\n      a if a.constructor == ctor -> Nil\n      Thing(constructor:) if ctor == constructor -> Nil\n      _ -> Nil\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub type Thing {
+  Thing(constructor: Nil)
+}
+
+pub fn main() {
+  let a = Thing(constructor: Nil)
+  let Thing(constructor: ctor) = a
+  case a {
+      a if a.constructor == ctor -> Nil
+      Thing(constructor:) if ctor == constructor -> Nil
+      _ -> Nil
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type Thing_c struct {Constructor gleam_P.Nil_t}
+
+func (c Thing_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.Constructor.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c Thing_c) Equal(o Thing_c) bool {
+  _ = o
+  if !c.Constructor.Equal(o.Constructor) { return false }
+  return true
+}
+
+type Thing_t = Thing_c
+
+func Main() gleam_P.Nil_t {
+  var a Thing_t = Thing_c{gleam_P.Nil_c{}}
+  _ = a
+  var ctor gleam_P.Nil_t = a.Constructor
+  _ = ctor
+  if gleam_P.Bool_t(a.Constructor_f().Equal(ctor)) {
+    var aʹ1 Thing_t = a
+    _ = aʹ1
+    return gleam_P.Nil_c{}
+  } else if gleam_P.Bool_t(ctor.Equal(a.Constructor)) {
+    var constructor gleam_P.Nil_t = a.Constructor
+    _ = constructor
+    return gleam_P.Nil_c{}
+  } else {
+    return gleam_P.Nil_c{}
+  }
+}

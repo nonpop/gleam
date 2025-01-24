@@ -1,0 +1,37 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "\npub fn loop(indentation) {\n  case indentation > 0 {\n    True -> loop(indentation - 1)\n    False -> Nil\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn loop(indentation) {
+  case indentation > 0 {
+    True -> loop(indentation - 1)
+    False -> Nil
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Loop(loop_indentation gleam_P.Int_t) gleam_P.Nil_t {
+  for {
+    var indentation gleam_P.Int_t = loop_indentation
+    var _a gleam_P.Bool_t = indentation > 0
+    _ = _a
+    if _a {
+      loop_indentation = indentation - 1
+    } else {
+      return gleam_P.Nil_c{}
+    }
+  }
+}

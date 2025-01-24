@@ -1,0 +1,25 @@
+---
+source: compiler-core/src/go/tests/bit_arrays.rs
+expression: "\nfn go(i: Int) {\n  <<i:16-little>>\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(i: Int) {
+  <<i:16-little>>
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ(i gleam_P.Int_t) gleam_P.BitArray_t {
+  return gleam_P.ToBitArray(gleam_P.SizedInt(i, 16, false))
+}

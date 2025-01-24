@@ -1,0 +1,36 @@
+---
+source: compiler-core/src/go/tests/panic.rs
+expression: "\nfn go(x) {\n  case x {\n    _ -> panic\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x) {
+  case x {
+    _ -> panic
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[I gleam_P.Type[I], L gleam_P.Type[L]](x I) L {
+  {
+    panic(gleam_P.MakeError(
+      "panic",
+      "my/mod",
+      4,
+      "go",
+      "`panic` expression evaluated.",
+      map[string]any{},
+    ))
+  }
+}

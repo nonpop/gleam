@@ -1,0 +1,64 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "\ntype Wibble {\n  Wibble(wibble: String)\n}\n\npub fn main() {\n  let assert Wibble(wibble: \"w\" as prefix <> rest) = Wibble(\"wibble\")\n  prefix <> rest\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Wibble {
+  Wibble(wibble: String)
+}
+
+pub fn main() {
+  let assert Wibble(wibble: "w" as prefix <> rest) = Wibble("wibble")
+  prefix <> rest
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  "strings"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type wibble_c struct {wibble gleam_P.String_t}
+
+func (c wibble_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.wibble.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c wibble_c) Equal(o wibble_c) bool {
+  _ = o
+  if !c.wibble.Equal(o.wibble) { return false }
+  return true
+}
+
+type wibble_t = wibble_c
+
+func Main() gleam_P.String_t {
+  var _a wibble_t = wibble_c{"wibble"}
+  _ = _a
+  if gleam_P.Bool_t(!strings.HasPrefix(string(_a.wibble), "w")) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      7,
+      "main",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": _a },
+    ))
+  }
+  var rest gleam_P.String_t = _a.wibble[1:]
+  _ = rest
+  var prefix gleam_P.String_t = "w"
+  _ = prefix
+  return prefix + rest
+}

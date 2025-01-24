@@ -1,0 +1,63 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "\ntype Cat {\n  Cat(String, cuteness: Int)\n}\n\nfn go(cat) {\n  let Cat(x, y) = cat\n  let Cat(cuteness: y, ..) = cat\n  let Cat(x, cuteness: y) = cat\n  x\n}\n\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Cat {
+  Cat(String, cuteness: Int)
+}
+
+fn go(cat) {
+  let Cat(x, y) = cat
+  let Cat(cuteness: y, ..) = cat
+  let Cat(x, cuteness: y) = cat
+  x
+}
+
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type cat_c struct {p_0 gleam_P.String_t; cuteness gleam_P.Int_t}
+
+func (c cat_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.p_0.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  hh = c.cuteness.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c cat_c) Equal(o cat_c) bool {
+  _ = o
+  if !c.p_0.Equal(o.p_0) { return false }
+  if !c.cuteness.Equal(o.cuteness) { return false }
+  return true
+}
+
+type cat_t = cat_c
+
+func goʹ(cat cat_t) gleam_P.String_t {
+  var x gleam_P.String_t = cat.p_0
+  _ = x
+  var y gleam_P.Int_t = cat.cuteness
+  _ = y
+  var yʹ1 gleam_P.Int_t = cat.cuteness
+  _ = yʹ1
+  var xʹ1 gleam_P.String_t = cat.p_0
+  _ = xʹ1
+  var yʹ2 gleam_P.Int_t = cat.cuteness
+  _ = yʹ2
+  return xʹ1
+}

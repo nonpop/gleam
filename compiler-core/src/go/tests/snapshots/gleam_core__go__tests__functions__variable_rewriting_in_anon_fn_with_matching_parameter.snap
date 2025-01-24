@@ -1,0 +1,31 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "pub fn bad() {\n  fn(state) {\n    let state = state\n    state\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn bad() {
+  fn(state) {
+    let state = state
+    state
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Bad[J gleam_P.Type[J]]() gleam_P.Func1_t[J, J] {
+  return func(state J) J {
+    var stateʹ1 J = state
+    _ = stateʹ1
+    return stateʹ1
+  }
+}

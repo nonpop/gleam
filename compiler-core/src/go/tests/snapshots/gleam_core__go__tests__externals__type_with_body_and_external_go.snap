@@ -1,0 +1,24 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: "\n@external(go, \"some/path\", \"SomeType\")\npub type Thing { Thing }\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "some/path", "SomeType")
+pub type Thing { Thing }
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  path_P "some/path"
+)
+
+const _ = gleam_P.Use_Import
+const _ = path_P.Use_Import
+const Use_Import byte = 0
+
+type Thing_t = path_P.SomeType

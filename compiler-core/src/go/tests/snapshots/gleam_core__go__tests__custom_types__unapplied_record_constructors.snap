@@ -1,0 +1,43 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "pub type Cat { Cat(name: String) }\n\npub fn return_unapplied_cat() {\n  Cat\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub type Cat { Cat(name: String) }
+
+pub fn return_unapplied_cat() {
+  Cat
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type Cat_c struct {Name gleam_P.String_t}
+
+func (c Cat_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.Name.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c Cat_c) Equal(o Cat_c) bool {
+  _ = o
+  if !c.Name.Equal(o.Name) { return false }
+  return true
+}
+
+type Cat_t = Cat_c
+
+func ReturnUnappliedCat() gleam_P.Func1_t[gleam_P.String_t, Cat_t] {
+  return func(P_0 gleam_P.String_t) Cat_t { return Cat_c{P_0} }
+}

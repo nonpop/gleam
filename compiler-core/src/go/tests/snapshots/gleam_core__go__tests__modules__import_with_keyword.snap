@@ -1,0 +1,31 @@
+---
+source: compiler-core/src/go/tests/modules.rs
+expression: "\nimport rocket_ship.{func, var as for}\npub fn main() {\n  #(func, for)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+import rocket_ship.{func, var as for}
+pub fn main() {
+  #(func, for)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  rocket_ship_P "example.com/todo/thepackage/rocket_ship"
+)
+
+const _ = gleam_P.Use_Import
+const _ = rocket_ship_P.Use_Import
+const Use_Import byte = 0
+
+func Main() gleam_P.Tuple2_t[gleam_P.Int_t, gleam_P.Int_t] {
+  return gleam_P.Tuple2_t[gleam_P.Int_t, gleam_P.Int_t]{
+    rocket_ship_P.Func,
+    rocket_ship_P.Var,
+  }
+}

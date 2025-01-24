@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\ntype A {\n    A(String)\n    type\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

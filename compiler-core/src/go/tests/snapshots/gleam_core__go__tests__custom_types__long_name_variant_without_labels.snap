@@ -1,0 +1,79 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "\ntype TypeWithALongNameAndSeveralArguments{\n  TypeWithALongNameAndSeveralArguments(String, String, String, String, String)\n}\n\nfn go() {\n  TypeWithALongNameAndSeveralArguments\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type TypeWithALongNameAndSeveralArguments{
+  TypeWithALongNameAndSeveralArguments(String, String, String, String, String)
+}
+
+fn go() {
+  TypeWithALongNameAndSeveralArguments
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type typeWithALongNameAndSeveralArguments_c struct {
+  p_0 gleam_P.String_t
+  p_1 gleam_P.String_t
+  p_2 gleam_P.String_t
+  p_3 gleam_P.String_t
+  p_4 gleam_P.String_t
+}
+
+func (c typeWithALongNameAndSeveralArguments_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.p_0.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  hh = c.p_1.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  hh = c.p_2.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  hh = c.p_3.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  hh = c.p_4.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c typeWithALongNameAndSeveralArguments_c) Equal(o typeWithALongNameAndSeveralArguments_c) bool {
+  _ = o
+  if !c.p_0.Equal(o.p_0) { return false }
+  if !c.p_1.Equal(o.p_1) { return false }
+  if !c.p_2.Equal(o.p_2) { return false }
+  if !c.p_3.Equal(o.p_3) { return false }
+  if !c.p_4.Equal(o.p_4) { return false }
+  return true
+}
+
+type typeWithALongNameAndSeveralArguments_t = typeWithALongNameAndSeveralArguments_c
+
+func goʹ() gleam_P.Func5_t[
+  gleam_P.String_t,
+  gleam_P.String_t,
+  gleam_P.String_t,
+  gleam_P.String_t,
+  gleam_P.String_t,
+  typeWithALongNameAndSeveralArguments_t,
+] {
+  return func(
+      p_0 gleam_P.String_t,
+      p_1 gleam_P.String_t,
+      p_2 gleam_P.String_t,
+      p_3 gleam_P.String_t,
+      p_4 gleam_P.String_t,
+    ) typeWithALongNameAndSeveralArguments_t {
+    return typeWithALongNameAndSeveralArguments_c{p_0, p_1, p_2, p_3, p_4}
+  }
+}

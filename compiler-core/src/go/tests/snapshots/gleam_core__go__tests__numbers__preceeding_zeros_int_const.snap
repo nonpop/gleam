@@ -1,0 +1,21 @@
+---
+source: compiler-core/src/go/tests/numbers.rs
+expression: "\nconst x = 09_179\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+const x = 09_179
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var x gleam_P.Int_t = 9_179

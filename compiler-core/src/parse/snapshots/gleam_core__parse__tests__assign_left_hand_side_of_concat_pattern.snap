@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\n        case \"\" {\n          first <> rest -> rest\n        }\n        "
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

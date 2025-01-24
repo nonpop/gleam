@@ -1,0 +1,34 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "\npub fn one() { One }\npub type One { One }\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn one() { One }
+pub type One { One }
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type One_c struct {}
+
+func (c One_c) Hash() uint32 {return gleam_P.NilHash }
+func (c One_c) Equal(o One_c) bool {
+  _ = o
+  return true
+}
+
+type One_t = One_c
+
+func One() One_t {
+  return One_c{}
+}

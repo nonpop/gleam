@@ -1,0 +1,76 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "\n\nfn go(x, wibble) {\n  let a = 1\n  wibble(a)\n  let a = 2\n  wibble(a)\n  let assert #(a, 3) = x\n  let b = a\n  wibble(b)\n  let c = {\n    let a = a\n    #(a, b)\n  }\n  wibble(a)\n  // make sure arguments are counted in initial state\n  let x = c\n  x\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+
+fn go(x, wibble) {
+  let a = 1
+  wibble(a)
+  let a = 2
+  wibble(a)
+  let assert #(a, 3) = x
+  let b = a
+  wibble(b)
+  let c = {
+    let a = a
+    #(a, b)
+  }
+  wibble(a)
+  // make sure arguments are counted in initial state
+  let x = c
+  x
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[M gleam_P.Type[M]](
+  x gleam_P.Tuple2_t[gleam_P.Int_t, gleam_P.Int_t],
+  wibble gleam_P.Func1_t[gleam_P.Int_t, M],
+) gleam_P.Tuple2_t[gleam_P.Int_t, gleam_P.Int_t] {
+  var a gleam_P.Int_t = 1
+  _ = a
+  _ = wibble(a)
+  var aʹ1 gleam_P.Int_t = 2
+  _ = aʹ1
+  _ = wibble(aʹ1)
+  if gleam_P.Bool_t(!x.P_1.Equal(3)) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      8,
+      "go",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": x },
+    ))
+  }
+  var aʹ2 gleam_P.Int_t = x.P_0
+  _ = aʹ2
+  var b gleam_P.Int_t = aʹ2
+  _ = b
+  _ = wibble(b)
+  var c gleam_P.Tuple2_t[gleam_P.Int_t, gleam_P.Int_t] = (func() gleam_P.Tuple2_t[
+      gleam_P.Int_t,
+      gleam_P.Int_t,
+    ] {
+    var aʹ3 gleam_P.Int_t = aʹ2
+    _ = aʹ3
+    return gleam_P.Tuple2_t[gleam_P.Int_t, gleam_P.Int_t]{aʹ3, b}
+  })()
+  _ = c
+  _ = wibble(aʹ2)
+  var xʹ1 gleam_P.Tuple2_t[gleam_P.Int_t, gleam_P.Int_t] = c
+  _ = xʹ1
+  return xʹ1
+}

@@ -1,0 +1,26 @@
+---
+source: compiler-core/src/go/tests/bit_arrays.rs
+assertion_line: 302
+expression: "\nfn go(x) {\n  <<x:bits>>\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x) {
+  <<x:bits>>
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ(x gleam_P.BitArray_t) gleam_P.BitArray_t {
+  return gleam_P.ToBitArray(x.Buffer())
+}

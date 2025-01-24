@@ -1,0 +1,79 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\ntype Foo { Foo(bar1: Int, bar2: Int) }\n\nfn baz1() {\n  let assert [Foo(bar1: 0, ..)] = []\n}\n\nfn baz2() {\n  let assert [Foo(bar2: 0, ..)] = []\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Foo { Foo(bar1: Int, bar2: Int) }
+
+fn baz1() {
+  let assert [Foo(bar1: 0, ..)] = []
+}
+
+fn baz2() {
+  let assert [Foo(bar2: 0, ..)] = []
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type foo_c struct {bar1 gleam_P.Int_t; bar2 gleam_P.Int_t}
+
+func (c foo_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.bar1.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  hh = c.bar2.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c foo_c) Equal(o foo_c) bool {
+  _ = o
+  if !c.bar1.Equal(o.bar1) { return false }
+  if !c.bar2.Equal(o.bar2) { return false }
+  return true
+}
+
+type foo_t = foo_c
+
+func baz1() gleam_P.List_t[foo_t] {
+  var _a gleam_P.List_t[foo_t] = gleam_P.ToList[foo_t]()
+  _ = _a
+  if !_a.HasLength(1) || gleam_P.Bool_t(!_a.Head().bar1.Equal(0)) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      5,
+      "baz1",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": _a },
+    ))
+  }
+  return _a
+}
+
+func baz2() gleam_P.List_t[foo_t] {
+  var _a gleam_P.List_t[foo_t] = gleam_P.ToList[foo_t]()
+  _ = _a
+  if !_a.HasLength(1) || gleam_P.Bool_t(!_a.Head().bar2.Equal(0)) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      9,
+      "baz2",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": _a },
+    ))
+  }
+  return _a
+}

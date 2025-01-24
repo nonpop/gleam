@@ -1,0 +1,37 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: "\n@external(go, \"module\", \"String\")\nfn name() -> String\n\npub fn main() {\n  let name = name()\n  name\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "module", "String")
+fn name() -> String
+
+pub fn main() {
+  let name = name()
+  name
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  module_P "module"
+)
+
+const _ = gleam_P.Use_Import
+const _ = module_P.Use_Import
+const Use_Import byte = 0
+
+func name() gleam_P.String_t {
+  return module_P.String()
+}
+
+func Main() gleam_P.String_t {
+  var nameʹ1 gleam_P.String_t = name()
+  _ = nameʹ1
+  return nameʹ1
+}

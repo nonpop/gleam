@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\n  pub fn main() {\n    case 1 {\n      1 -> _with_underscore(1)\n    }\n  }"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

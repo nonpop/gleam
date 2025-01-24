@@ -1,0 +1,40 @@
+---
+source: compiler-core/src/go/tests/case.rs
+expression: "\npub fn main() {\n  let text = \"first defined\"\n  case \"defined again\" {\n    text -> Nil\n  }\n  let text = \"a third time\"\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn main() {
+  let text = "first defined"
+  case "defined again" {
+    text -> Nil
+  }
+  let text = "a third time"
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main() gleam_P.String_t {
+  var text gleam_P.String_t = "first defined"
+  _ = text
+  var _a gleam_P.String_t = "defined again"
+  _ = _a
+  {
+    var textʹ1 gleam_P.String_t = _a
+    _ = textʹ1
+    _ = gleam_P.Nil_c{}
+  }
+  var textʹ1 gleam_P.String_t = "a third time"
+  _ = textʹ1
+  return textʹ1
+}

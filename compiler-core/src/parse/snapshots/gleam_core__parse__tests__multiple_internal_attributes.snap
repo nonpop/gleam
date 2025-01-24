@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\n@internal\n@internal\npub fn main() -> Nil {\n  Nil\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

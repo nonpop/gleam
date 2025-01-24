@@ -1,0 +1,24 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "pub fn main() {\n  { fn(n) { n + 1 } }(10)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main() {
+  { fn(n) { n + 1 } }(10)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main() gleam_P.Int_t {
+  return (func(n gleam_P.Int_t) gleam_P.Int_t { return n + 1 })(10)
+}

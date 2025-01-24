@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\nfn main() {\n    let <<b1, pub>> = <<24, 3>>\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

@@ -1,0 +1,37 @@
+---
+source: compiler-core/src/go/tests/strings.rs
+expression: "\npub fn go(x) {\n  case x {\n    \"Hello, \" as x <> name -> x\n    _ -> \"Unknown\"\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn go(x) {
+  case x {
+    "Hello, " as x <> name -> x
+    _ -> "Unknown"
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  "strings"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Go(x gleam_P.String_t) gleam_P.String_t {
+  if gleam_P.Bool_t(strings.HasPrefix(string(x), "Hello, ")) {
+    var name gleam_P.String_t = x[7:]
+    _ = name
+    var xʹ1 gleam_P.String_t = "Hello, "
+    _ = xʹ1
+    return xʹ1
+  } else {
+    return "Unknown"
+  }
+}

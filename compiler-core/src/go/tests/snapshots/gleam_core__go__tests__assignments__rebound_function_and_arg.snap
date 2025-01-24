@@ -1,0 +1,35 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "fn x() {\n  Nil\n}\n\npub fn main(x) {\n  let x = False\n  x\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+fn x() {
+  Nil
+}
+
+pub fn main(x) {
+  let x = False
+  x
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func x() gleam_P.Nil_t {
+  return gleam_P.Nil_c{}
+}
+
+func Main[J gleam_P.Type[J]](x J) gleam_P.Bool_t {
+  var xʹ1 gleam_P.Bool_t = false
+  _ = xʹ1
+  return xʹ1
+}

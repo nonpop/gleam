@@ -1,0 +1,25 @@
+---
+source: compiler-core/src/go/tests/numbers.rs
+expression: "\nfn main() {\n  09_179.1\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn main() {
+  09_179.1
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func main() gleam_P.Float_t {
+  return 9_179.1
+}

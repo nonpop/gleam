@@ -34,6 +34,9 @@ pub fn command(options: CompilePackage) -> Result<()> {
                 .javascript_prelude
                 .ok_or_else(|| Error::JavaScriptPreludeRequired)?,
         },
+        Target::Go => TargetCodegenConfiguration::Go {
+            go_module_path: "example.com/todo".into(), // TODO
+        },
     };
 
     tracing::info!("Compiling package");

@@ -1,0 +1,29 @@
+---
+source: compiler-core/src/go/tests/lists.rs
+expression: "\nfn go(func) {\n  let huuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuge_variable = []\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(func) {
+  let huuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuge_variable = []
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[I gleam_P.Type[I], K gleam_P.Type[K]](funcʹ I) gleam_P.List_t[K] {
+  var huuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuugeVariable gleam_P.List_t[
+    K,
+  ] = gleam_P.ToList[K]()
+  _ = huuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuugeVariable
+  return huuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuugeVariable
+}

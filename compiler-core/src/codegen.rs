@@ -2,12 +2,13 @@ use crate::{
     analyse::TargetSupport,
     build::{ErlangAppCodegenConfiguration, Module},
     config::PackageConfig,
-    erlang,
+    erlang, go,
     io::FileSystemWriter,
     javascript,
     line_numbers::LineNumbers,
-    Result,
+    type_, Result,
 };
+use ecow::EcoString;
 use itertools::Itertools;
 use std::fmt::Debug;
 
@@ -248,6 +249,65 @@ impl<'a> JavaScript<'a> {
             self.typescript,
         );
         tracing::debug!(name = ?js_name, "Generated js module");
+        writer.write(&path, &output?)
+    }
+}
+
+#[derive(Debug)]
+pub struct Go<'a> {
+    output_directory: &'a Utf8Path,
+    go_module_path: &'a str,
+    target_support: TargetSupport,
+}
+
+impl<'a> Go<'a> {
+    pub fn new(
+        output_directory: &'a Utf8Path,
+        go_module_path: &'a str,
+        target_support: TargetSupport,
+    ) -> Self {
+        Self {
+            output_directory,
+            go_module_path,
+            target_support,
+        }
+    }
+
+    pub fn render(
+        &self,
+        writer: &impl FileSystemWriter,
+        existing_modules: &im::HashMap<EcoString, type_::ModuleInterface>,
+        modules: &[Module],
+    ) -> Result<()> {
+        let mut dep_modules = existing_modules.clone();
+        for module in modules {
+            let go_name = module.name.clone();
+            self.go_package(writer, &dep_modules, module, &go_name)?;
+            let _ = dep_modules.insert(module.name.clone(), module.ast.type_info.clone());
+        }
+        Ok(())
+    }
+
+    fn go_package(
+        &self,
+        writer: &impl FileSystemWriter,
+        dep_modules: &im::HashMap<EcoString, type_::ModuleInterface>,
+        module: &Module,
+        go_name: &str,
+    ) -> Result<()> {
+        let name = format!("{go_name}/gleam_generated.go");
+        let path = self.output_directory.join(name);
+        let line_numbers = LineNumbers::new(&module.code);
+        let output = go::module(
+            dep_modules,
+            &module.ast,
+            &line_numbers,
+            &module.input_path,
+            &module.code,
+            self.target_support,
+            self.go_module_path,
+        );
+        tracing::debug!(name = ?go_name, "Generated go package");
         writer.write(&path, &output?)
     }
 }

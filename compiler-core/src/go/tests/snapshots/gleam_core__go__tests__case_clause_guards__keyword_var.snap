@@ -1,0 +1,69 @@
+---
+source: compiler-core/src/go/tests/case_clause_guards.rs
+expression: "\npub const function = 5\npub const do = 10\npub fn main() {\n  let class = 5\n  let while = 10\n  let var = 7\n  case var {\n    _ if class == while -> True\n    _ if [class] == [5] -> True\n    function if #(function) == #(5) -> False\n    _ if do == function -> True\n    while if while > 5 -> False\n    class -> False\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub const function = 5
+pub const do = 10
+pub fn main() {
+  let class = 5
+  let while = 10
+  let var = 7
+  case var {
+    _ if class == while -> True
+    _ if [class] == [5] -> True
+    function if #(function) == #(5) -> False
+    _ if do == function -> True
+    while if while > 5 -> False
+    class -> False
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var Function gleam_P.Int_t = 5
+
+var Do gleam_P.Int_t = 10
+
+func Main() gleam_P.Bool_t {
+  var class gleam_P.Int_t = 5
+  _ = class
+  var while gleam_P.Int_t = 10
+  _ = while
+  var varʹ gleam_P.Int_t = 7
+  _ = varʹ
+  if gleam_P.Bool_t(class.Equal(while)) {
+    return true
+  } else if gleam_P.Bool_t(gleam_P.ToList[gleam_P.Int_t](class).Equal(gleam_P.ToList[gleam_P.Int_t](
+    5,
+  ))) {
+    return true
+  } else if gleam_P.Bool_t(gleam_P.Tuple1_t[gleam_P.Int_t]{varʹ}.Equal(gleam_P.Tuple1_t[
+    gleam_P.Int_t,
+  ]{5})) {
+    var functionʹ1 gleam_P.Int_t = varʹ
+    _ = functionʹ1
+    return false
+  } else if gleam_P.Bool_t(10.Equal(5)) {
+    return true
+  } else if varʹ > 5 {
+    var whileʹ1 gleam_P.Int_t = varʹ
+    _ = whileʹ1
+    return false
+  } else {
+    var classʹ1 gleam_P.Int_t = varʹ
+    _ = classʹ1
+    return false
+  }
+}

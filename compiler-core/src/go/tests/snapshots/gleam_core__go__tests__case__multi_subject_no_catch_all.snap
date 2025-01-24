@@ -1,0 +1,35 @@
+---
+source: compiler-core/src/go/tests/case.rs
+expression: "\nfn go(x, y) {\n  case x, y {\n    True, _ -> 1\n    _, True -> 2\n    False, False -> 0\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x, y) {
+  case x, y {
+    True, _ -> 1
+    _, True -> 2
+    False, False -> 0
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ(x gleam_P.Bool_t, y gleam_P.Bool_t) gleam_P.Int_t {
+  if x {
+    return 1
+  } else if y {
+    return 2
+  } else {
+    return 0
+  }
+}

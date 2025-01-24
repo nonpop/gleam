@@ -1,0 +1,71 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "\ntype Ip{\n    Ip(String)\n}\n\nconst local = Ip(\"0.0.0.0\")\n\nfn build(x) {\n    x(\"1.2.3.4\")\n}\n\nfn go() {\n    build(Ip)\n    Ip(\"5.6.7.8\")\n}\n\nfn destructure(x) {\n  let Ip(raw) = x\n  raw\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Ip{
+    Ip(String)
+}
+
+const local = Ip("0.0.0.0")
+
+fn build(x) {
+    x("1.2.3.4")
+}
+
+fn go() {
+    build(Ip)
+    Ip("5.6.7.8")
+}
+
+fn destructure(x) {
+  let Ip(raw) = x
+  raw
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type ip_c struct {p_0 gleam_P.String_t}
+
+func (c ip_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.p_0.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c ip_c) Equal(o ip_c) bool {
+  _ = o
+  if !c.p_0.Equal(o.p_0) { return false }
+  return true
+}
+
+type ip_t = ip_c
+
+func build[O gleam_P.Type[O]](x gleam_P.Func1_t[gleam_P.String_t, O]) O {
+  return x("1.2.3.4")
+}
+
+func goʹ() ip_t {
+  _ = build[ip_t](func(p_0 gleam_P.String_t) ip_t { return ip_c{p_0} })
+  return ip_c{"5.6.7.8"}
+}
+
+func destructure(x ip_t) gleam_P.String_t {
+  var raw gleam_P.String_t = x.p_0
+  _ = raw
+  return raw
+}
+
+var local ip_t = ip_c{"0.0.0.0"}

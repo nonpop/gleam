@@ -1,0 +1,35 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\nimport gleam/int\n\nfn use_order_internally() {\n    fn() { int.compare(1, 2) }() == fn() { int.compare(3, 4) }()\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+import gleam/int
+
+fn use_order_internally() {
+    fn() { int.compare(1, 2) }() == fn() { int.compare(3, 4) }()
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  intʹ_P "example.com/todo/thepackage/gleam/int"
+  order_P "example.com/todo/thepackage/gleam/order"
+)
+
+const _ = gleam_P.Use_Import
+const _ = intʹ_P.Use_Import
+const _ = order_P.Use_Import
+const Use_Import byte = 0
+
+func useOrderInternally() gleam_P.Bool_t {
+  return gleam_P.Bool_t((func() order_P.Order_t { return intʹ_P.Compare(1, 2) })().Equal((func(
+      ,
+    ) order_P.Order_t {
+    return intʹ_P.Compare(3, 4)
+  })()))
+}

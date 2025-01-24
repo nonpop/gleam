@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\nfn main() {\n    case somelist {\n        [..rest, last] -> 1\n        _ -> 2\n    }\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

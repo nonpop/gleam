@@ -7,7 +7,7 @@ use pretty_assertions::assert_eq;
 
 use gleam_core::{
     build::Runtime,
-    config::{DenoConfig, DenoFlag, Docs, ErlangConfig, JavaScriptConfig, Repository},
+    config::{DenoConfig, DenoFlag, Docs, ErlangConfig, GoConfig, JavaScriptConfig, Repository},
     manifest::{Base16Checksum, Manifest, ManifestPackage, ManifestPackageSource},
     requirement::Requirement,
     Error,
@@ -1203,6 +1203,7 @@ fn package_config(
                 location: None,
             },
         },
+        go: GoConfig {},
         target: Target::Erlang,
         internal_modules: None,
     }

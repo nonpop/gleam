@@ -1,0 +1,34 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\nfn id_str(x: String) { x }\nfn id(x) { x }\nconst ids = [id_str, id]\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn id_str(x: String) { x }
+fn id(x) { x }
+const ids = [id_str, id]
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func idStr(x gleam_P.String_t) gleam_P.String_t {
+  return x
+}
+
+func id[J gleam_P.Type[J]](x J) J {
+  return x
+}
+
+var ids gleam_P.List_t[gleam_P.Func1_t[gleam_P.String_t, gleam_P.String_t]] = gleam_P.ToList[gleam_P.Func1_t[
+  gleam_P.String_t,
+  gleam_P.String_t,
+]](idStr, id[gleam_P.String_t])

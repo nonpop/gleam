@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "let assert [x] = [2]"
+snapshot_kind: text
 ---
 [
     Assignment(

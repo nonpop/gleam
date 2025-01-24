@@ -1,0 +1,41 @@
+---
+source: compiler-core/src/go/tests/numbers.rs
+expression: "\nfn go() {\n    1 + 1 // => 2\n    5 - 1 // => 4\n    5 / 2 // => 2\n    3 * 3 // => 9\n    5 % 2 // => 1\n    2 > 1  // => True\n    2 < 1  // => False\n    2 >= 1 // => True\n    2 <= 1 // => False\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+    1 + 1 // => 2
+    5 - 1 // => 4
+    5 / 2 // => 2
+    3 * 3 // => 9
+    5 % 2 // => 1
+    2 > 1  // => True
+    2 < 1  // => False
+    2 >= 1 // => True
+    2 <= 1 // => False
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.Bool_t {
+  _ = 1 + 1
+  _ = 5 - 1
+  _ = gleam_P.DivideInt(5, 2)
+  _ = 3 * 3
+  _ = gleam_P.RemainderInt(5, 2)
+  _ = 2 > 1
+  _ = 2 < 1
+  _ = 2 >= 1
+  return 2 <= 1
+}

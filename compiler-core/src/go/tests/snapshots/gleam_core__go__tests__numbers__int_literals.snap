@@ -1,0 +1,39 @@
+---
+source: compiler-core/src/go/tests/numbers.rs
+expression: "\nfn go() {\n    1\n    2\n    -3\n    4001\n    0b00001111\n    0o17\n    0xF\n    1_000\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+    1
+    2
+    -3
+    4001
+    0b00001111
+    0o17
+    0xF
+    1_000
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.Int_t {
+  _ = 1
+  _ = 2
+  _ = -3
+  _ = 4001
+  _ = 0b1111
+  _ = 0o17
+  _ = 0xF
+  return 1_000
+}

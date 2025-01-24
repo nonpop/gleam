@@ -1,0 +1,38 @@
+---
+source: compiler-core/src/go/tests/case.rs
+expression: "\nfn go(x, f) {\n  case x |> f {\n    0 -> 1\n    _ -> 2\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x, f) {
+  case x |> f {
+    0 -> 1
+    _ -> 2
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[I gleam_P.Type[I]](x I, f gleam_P.Func1_t[I, gleam_P.Int_t]) gleam_P.Int_t {
+  var _a gleam_P.Int_t = (func() gleam_P.Int_t {
+    var _pipe I = x
+    _ = _pipe
+    return f(_pipe)
+  })()
+  _ = _a
+  if gleam_P.Bool_t(_a.Equal(0)) {
+    return 1
+  } else {
+    return 2
+  }
+}

@@ -1,0 +1,28 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "import for.{class}\n\nfn func() {\n  class()\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+import for.{class}
+
+fn func() {
+  class()
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  forʹ_P "example.com/todo/thepackage/for"
+)
+
+const _ = gleam_P.Use_Import
+const _ = forʹ_P.Use_Import
+const Use_Import byte = 0
+
+func funcʹ() gleam_P.Int_t {
+  return forʹ_P.Class()
+}

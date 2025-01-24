@@ -1,0 +1,37 @@
+---
+source: compiler-core/src/go/tests/case_clause_guards.rs
+expression: "pub fn main(xs) -> Int {\n  case xs {\n    [x] | [_, x] -> x\n    _ -> 1\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main(xs) -> Int {
+  case xs {
+    [x] | [_, x] -> x
+    _ -> 1
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main(xs gleam_P.List_t[gleam_P.Int_t]) gleam_P.Int_t {
+  if xs.HasLength(1) {
+    var x gleam_P.Int_t = xs.Head()
+    _ = x
+    return x
+  } else if xs.HasLength(2) {
+    var x gleam_P.Int_t = xs.Tail().Head()
+    _ = x
+    return x
+  } else {
+    return 1
+  }
+}

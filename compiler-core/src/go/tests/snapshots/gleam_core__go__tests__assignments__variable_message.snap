@@ -1,0 +1,41 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "\npub fn expect(value, message) {\n  let assert Ok(inner) = value as message\n  inner\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn expect(value, message) {
+  let assert Ok(inner) = value as message
+  inner
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Expect[L gleam_P.Type[L], M gleam_P.Type[M]](
+  value gleam_P.Result_t[L, M],
+  message gleam_P.String_t,
+) L {
+  if !value.IsOk() {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      3,
+      "expect",
+      message,
+      map[string]any{"value": value },
+    ))
+  }
+  var inner L = value.AsOk().P_0
+  _ = inner
+  return inner
+}

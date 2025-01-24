@@ -1,0 +1,43 @@
+---
+source: compiler-core/src/go/tests/use_.rs
+expression: "\npub fn main() {\n  use <- pair(1.0)\n  123\n}\n\nfn pair(x, f) {\n  let y = f()\n  #(x, y)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn main() {
+  use <- pair(1.0)
+  123
+}
+
+fn pair(x, f) {
+  let y = f()
+  #(x, y)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func pair[J gleam_P.Type[J], M gleam_P.Type[M]](x J, f gleam_P.Func0_t[M]) gleam_P.Tuple2_t[
+  J,
+  M,
+] {
+  var y M = f()
+  _ = y
+  return gleam_P.Tuple2_t[J, M]{x, y}
+}
+
+func Main() gleam_P.Tuple2_t[gleam_P.Float_t, gleam_P.Int_t] {
+  return pair[gleam_P.Float_t, gleam_P.Int_t](
+    1.0,
+    func() gleam_P.Int_t { return 123 },
+  )
+}

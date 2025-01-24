@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\n@external(javascript, \"one\", \"two\")\n@external(javascript, \"three\", \"four\")\npub fn one(x: Int) -> Int {\n  todo\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

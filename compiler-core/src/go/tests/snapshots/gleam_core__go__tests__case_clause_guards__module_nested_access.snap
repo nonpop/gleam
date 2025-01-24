@@ -1,0 +1,40 @@
+---
+source: compiler-core/src/go/tests/case_clause_guards.rs
+expression: "\n          import hero\n          pub fn main() {\n            let name = \"Bruce Wayne\"\n            case name {\n              n if n == hero.batman.secret_identity.name -> True\n              _ -> False\n            }\n          }\n        "
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+          import hero
+          pub fn main() {
+            let name = "Bruce Wayne"
+            case name {
+              n if n == hero.batman.secret_identity.name -> True
+              _ -> False
+            }
+          }
+        
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  hero_P "example.com/todo/package/hero"
+)
+
+const _ = gleam_P.Use_Import
+const _ = hero_P.Use_Import
+const Use_Import byte = 0
+
+func Main() gleam_P.Bool_t {
+  var name gleam_P.String_t = "Bruce Wayne"
+  _ = name
+  if gleam_P.Bool_t(name.Equal(hero_P.Batman.SecretIdentity_f().Name_f())) {
+    var n gleam_P.String_t = name
+    _ = n
+    return true
+  } else {
+    return false
+  }
+}

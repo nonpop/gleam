@@ -1,0 +1,51 @@
+---
+source: compiler-core/src/go/tests/blocks.rs
+expression: "\nfn add1(a) {\n  a + 1\n}\nfn go() {\n  let x = {\n    1\n    {\n      2\n      3 |> add1\n    } |> add1\n  }\n  x\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn add1(a) {
+  a + 1
+}
+fn go() {
+  let x = {
+    1
+    {
+      2
+      3 |> add1
+    } |> add1
+  }
+  x
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func add1(a gleam_P.Int_t) gleam_P.Int_t {
+  return a + 1
+}
+
+func goʹ() gleam_P.Int_t {
+  var x gleam_P.Int_t = (func() gleam_P.Int_t {
+    _ = 1
+    var _pipe gleam_P.Int_t = (func() gleam_P.Int_t {
+      _ = 2
+      var _pipe gleam_P.Int_t = 3
+      _ = _pipe
+      return add1(_pipe)
+    })()
+    _ = _pipe
+    return add1(_pipe)
+  })()
+  _ = x
+  return x
+}

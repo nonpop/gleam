@@ -1,0 +1,39 @@
+---
+source: compiler-core/src/go/tests/blocks.rs
+expression: "\nfn main(f, a, b) {\n  {\n    a\n    |> f\n  } <> {\n    b\n    |> f\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn main(f, a, b) {
+  {
+    a
+    |> f
+  } <> {
+    b
+    |> f
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func main[K gleam_P.Type[K]](f gleam_P.Func1_t[K, gleam_P.String_t], a K, b K) gleam_P.String_t {
+  return (func() gleam_P.String_t {
+    var _pipe K = a
+    _ = _pipe
+    return f(_pipe)
+  })() + (func() gleam_P.String_t {
+    var _pipe K = b
+    _ = _pipe
+    return f(_pipe)
+  })()
+}

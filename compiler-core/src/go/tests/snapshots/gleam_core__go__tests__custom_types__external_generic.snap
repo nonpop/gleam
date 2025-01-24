@@ -1,0 +1,22 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "\n@external(go, \"some/path\", \"SomeType\")\npub type Thing(a, b)\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "some/path", "SomeType")
+pub type Thing(a, b)
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  path_P "some/path"
+)
+
+const _ = path_P.Use_Import
+const Use_Import byte = 0
+
+type Thing_t[I, J any] = path_P.SomeType[I, J]

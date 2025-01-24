@@ -1,0 +1,62 @@
+---
+source: compiler-core/src/go/tests/case_clause_guards.rs
+expression: "import gleam.{Ok as Y}\npub type X {\n  Ok\n}\nfn func() {\n  case Y {\n    y if y == Y -> True\n    _ -> False\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+import gleam.{Ok as Y}
+pub type X {
+  Ok
+}
+fn func() {
+  case Y {
+    y if y == Y -> True
+    _ -> False
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type Ok_c struct {}
+
+func (c Ok_c) Hash() uint32 {return gleam_P.NilHash }
+func (c Ok_c) Equal(o Ok_c) bool {
+  _ = o
+  return true
+}
+
+type X_t = Ok_c
+
+func funcʹ() gleam_P.Bool_t {
+  var _a gleam_P.Func1_t[
+    gleam_P.Type,
+    gleam_P.Result_t[gleam_P.Type, gleam_P.Type],
+  ] = func(P_0 gleam_P.Type) gleam_P.Result_t[gleam_P.Type, gleam_P.Type] {
+    return gleam_P.Ok_c[gleam_P.Type, gleam_P.Type]{P_0}
+  }
+  _ = _a
+  if gleam_P.Bool_t(_a.Equal(func(p_0 gleam_P.Type) gleam_P.Result_t[
+      gleam_P.Type,
+      gleam_P.Type,
+    ] {
+    return gleam_P.Ok_c[gleam_P.Type, gleam_P.Type]{p_0}
+  })) {
+    var y gleam_P.Func1_t[
+      gleam_P.Type,
+      gleam_P.Result_t[gleam_P.Type, gleam_P.Type],
+    ] = _a
+    _ = y
+    return true
+  } else {
+    return false
+  }
+}

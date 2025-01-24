@@ -9,7 +9,7 @@ use crate::type_::error::{
 use crate::type_::printer::{Names, Printer};
 use crate::type_::{error::PatternMatchKind, FieldAccessUsage};
 use crate::{ast::BinOp, parse::error::ParseErrorType, type_::Type};
-use crate::{bit_array, diagnostic::Level, javascript, type_::UnifyErrorSituation};
+use crate::{bit_array, diagnostic::Level, go, javascript, type_::UnifyErrorSituation};
 use ecow::EcoString;
 use heck::{ToSnakeCase, ToTitleCase, ToUpperCamelCase};
 use hexpm::version::ResolutionError;
@@ -215,6 +215,13 @@ file_names.iter().map(|x| x.as_str()).join(", "))]
         path: Utf8PathBuf,
         src: EcoString,
         error: javascript::Error,
+    },
+
+    #[error("go codegen failed")]
+    Go {
+        path: Utf8PathBuf,
+        src: EcoString,
+        error: go::Error,
     },
 
     #[error("Invalid runtime for {target} target: {invalid_runtime}")]
@@ -3029,6 +3036,59 @@ implementation but the function name `{function}` is not valid."
                     }
                 }
 
+
+                TypeError::InvalidExternalGoPackage {
+                    location,
+                    name,
+                    module,
+                } => {
+                    let text = wrap_format!(
+                        "The function `{name}` has an external Go \
+implementation but the Go package path `{module}` is not valid."
+                    );
+                    Diagnostic {
+                        title: "Invalid Go package".into(),
+                        text,
+                        hint: None,
+                        level: Level::Error,
+                        location: Some(Location {
+                            label: Label {
+                                text: None,
+                                span: *location,
+                            },
+                            path: path.clone(),
+                            src: src.clone(),
+                            extra_labels: vec![],
+                        }),
+                    }
+                }
+
+                TypeError::InvalidExternalGoFunction {
+                    location,
+                    name,
+                    function,
+                } => {
+                    let text = wrap_format!(
+                        "The function `{name}` has an external Go \
+implementation but the function name `{function}` is not valid."
+                    );
+                    Diagnostic {
+                        title: "Invalid Go function".into(),
+                        text,
+                        hint: None,
+                        level: Level::Error,
+                        location: Some(Location {
+                            label: Label {
+                                text: None,
+                                span: *location,
+                            },
+                            path: path.clone(),
+                            src: src.clone(),
+                            extra_labels: vec![],
+                        }),
+                    }
+                }
+
                 TypeError::InexhaustiveLetAssignment { location, missing } => {
                     let mut text =wrap(
                         "This assignment uses a pattern that does not \
@@ -3119,6 +3179,7 @@ and there is no implementation for the {} target.\n",
                         match current_target {
                             Target::Erlang => "Erlang",
                             Target::JavaScript => "JavaScript",
+                            Target::Go => "Go",
                         }
                     );
                     let hint = wrap("Did you mean to build for a different target?");
@@ -3147,6 +3208,7 @@ and there is no implementation for the {} target.\n",
                     let target = match target {
                         Target::Erlang => "Erlang",
                         Target::JavaScript => "JavaScript",
+                        Target::Go => "Go",
                     };
                     let text = wrap_format!(
                         "The `{name}` function is public but doesn't have an \
@@ -3659,6 +3721,25 @@ Fix the warnings and try again."
                 }],
             },
 
+
+            Error::Go { src, path, error } => match error {
+                go::Error::Unsupported { feature, location } => vec![Diagnostic {
+                    title: "Unsupported feature for compilation target".into(),
+                    text: format!("{feature} is not supported for Go compilation."),
+                    hint: None,
+                    level: Level::Error,
+                    location: Some(Location {
+                        label: Label {
+                            text: None,
+                            span: *location,
+                        },
+                        path: path.clone(),
+                        src: src.clone(),
+                        extra_labels: vec![],
+                    }),
+                }],
+            },
+
             Error::DownloadPackageError {
                 package_name,
                 package_version,
@@ -3906,6 +3987,10 @@ satisfying {required_version} but you are using v{gleam_version}.",
                 let text = format!("Invalid runtime for {target} target: {invalid_runtime}");
 
                 let hint = match target {
+                    Target::Go => Some(
+                        "You can not set a runtime for Go. Did you mean to target JavaScript?"
+                            .into(),
+                    ),
                     Target::JavaScript => {
                         Some("available runtimes for JavaScript are: node, deno.".into())
                     }

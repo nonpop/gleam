@@ -38,12 +38,15 @@ fn parse_and_order(
             documentation: None,
             external_erlang: None,
             external_javascript: None,
+            external_go: None,
             implementations: Implementations {
                 gleam: true,
                 uses_erlang_externals: true,
                 uses_javascript_externals: false,
+                uses_go_externals: false,
                 can_run_on_erlang: true,
                 can_run_on_javascript: true,
+                can_run_on_go: true,
             },
         })
         .collect_vec();
@@ -63,8 +66,10 @@ fn parse_and_order(
                     gleam: true,
                     uses_erlang_externals: true,
                     uses_javascript_externals: false,
+                    uses_go_externals: false,
                     can_run_on_erlang: true,
                     can_run_on_javascript: true,
+                    can_run_on_go: true,
                 },
                 type_: (),
                 deprecation: Deprecation::NotDeprecated,

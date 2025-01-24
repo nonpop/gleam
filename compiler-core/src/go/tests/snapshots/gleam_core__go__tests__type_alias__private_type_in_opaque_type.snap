@@ -1,0 +1,52 @@
+---
+source: compiler-core/src/go/tests/type_alias.rs
+expression: "\ntype PrivateType {\n  PrivateType\n}\n\npub opaque type OpaqueType {\n  OpaqueType(PrivateType)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type PrivateType {
+  PrivateType
+}
+
+pub opaque type OpaqueType {
+  OpaqueType(PrivateType)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type privateType_c struct {}
+
+func (c privateType_c) Hash() uint32 {return gleam_P.NilHash }
+func (c privateType_c) Equal(o privateType_c) bool {
+  _ = o
+  return true
+}
+
+type privateType_t = privateType_c
+
+type opaqueType_c struct {p_0 privateType_t}
+
+func (c opaqueType_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.p_0.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c opaqueType_c) Equal(o opaqueType_c) bool {
+  _ = o
+  if !c.p_0.Equal(o.p_0) { return false }
+  return true
+}
+
+type OpaqueType_t = opaqueType_c

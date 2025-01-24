@@ -1,0 +1,33 @@
+---
+source: compiler-core/src/go/tests/case_clause_guards.rs
+expression: "pub fn main(xs, y) {\n  case xs {\n    #(x) if xs != y -> x\n    _ -> 0\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main(xs, y) {
+  case xs {
+    #(x) if xs != y -> x
+    _ -> 0
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main(xs gleam_P.Tuple1_t[gleam_P.Int_t], y gleam_P.Tuple1_t[gleam_P.Int_t]) gleam_P.Int_t {
+  if gleam_P.Bool_t(!xs.Equal(y)) {
+    var x gleam_P.Int_t = xs.P_0
+    _ = x
+    return x
+  } else {
+    return 0
+  }
+}

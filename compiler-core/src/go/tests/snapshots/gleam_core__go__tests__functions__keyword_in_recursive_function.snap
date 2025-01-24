@@ -1,0 +1,27 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "pub fn main(var: Int) -> Nil {\n  main(var - 1)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main(var: Int) -> Nil {
+  main(var - 1)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main(loop_varʹ gleam_P.Int_t) gleam_P.Nil_t {
+  for {
+    var varʹ gleam_P.Int_t = loop_varʹ
+    loop_varʹ = varʹ - 1
+  }
+}

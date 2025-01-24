@@ -1,0 +1,21 @@
+---
+source: compiler-core/src/go/tests/bit_arrays.rs
+assertion_line: 656
+expression: "\nfn go(x) {\n  let assert <<a:float-size(16)>> = x\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x) {
+  let assert <<a:float-size(16)>> = x
+}
+
+
+----- ERROR
+error: Unsupported feature for compilation target
+  ┌─ /src/go/error.gleam:3:16
+  │
+3 │   let assert <<a:float-size(16)>> = x
+  │                ^^^^^^^^^^^^^^^^
+
+Float width of 16 bits in patterns is not supported for Go compilation.

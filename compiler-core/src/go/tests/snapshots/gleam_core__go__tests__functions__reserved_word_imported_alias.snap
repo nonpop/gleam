@@ -1,0 +1,31 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "import for.{class as for} as func\n\npub fn export() {\n  let delete = func.class\n  for()\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+import for.{class as for} as func
+
+pub fn export() {
+  let delete = func.class
+  for()
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  funcʹ_P "example.com/todo/thepackage/for"
+)
+
+const _ = gleam_P.Use_Import
+const _ = funcʹ_P.Use_Import
+const Use_Import byte = 0
+
+func Export() gleam_P.Int_t {
+  var deleteʹ gleam_P.Func0_t[gleam_P.Int_t] = funcʹ_P.Class
+  _ = deleteʹ
+  return funcʹ_P.Class()
+}

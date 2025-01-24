@@ -1,0 +1,33 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "import other\npub fn main() {\n  other.Two\n}"
+snapshot_kind: text
+---
+----- SOURCE CODE
+import other
+pub fn main() {
+  other.Two
+}
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  other_P "example.com/todo/thepackage/other"
+)
+
+const _ = gleam_P.Use_Import
+const _ = other_P.Use_Import
+const Use_Import byte = 0
+
+func Main() gleam_P.Func3_t[
+  gleam_P.Int_t,
+  gleam_P.Int_t,
+  gleam_P.Int_t,
+  other_P.One_t,
+] {
+  return func(P_0 gleam_P.Int_t, P_1 gleam_P.Int_t, P_2 gleam_P.Int_t) other_P.One_t {
+    return other_P.Two_c{P_0, P_1, P_2}
+  }
+}

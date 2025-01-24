@@ -1,0 +1,31 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: "\n@external(go, \"queue\", \"Queue\")\npub type Queue(a)\n\n@external(go, \"queue\", \"New\")\npub fn new() -> Queue(a)\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "queue", "Queue")
+pub type Queue(a)
+
+@external(go, "queue", "New")
+pub fn new() -> Queue(a)
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  queue_P "queue"
+)
+
+const _ = gleam_P.Use_Import
+const _ = queue_P.Use_Import
+const Use_Import byte = 0
+
+type Queue_t[I gleam_P.Type[I]] = queue_P.Queue[I]
+
+func New[J gleam_P.Type[J]]() Queue_t[J] {
+  return queue_P.New[J]()
+}

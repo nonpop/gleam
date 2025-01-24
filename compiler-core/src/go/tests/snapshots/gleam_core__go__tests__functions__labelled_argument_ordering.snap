@@ -1,0 +1,92 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "\ntype A { A }\ntype B { B }\ntype C { C }\ntype D { D }\n\nfn wibble(a a: A, b b: B, c c: C, d d: D) {\n  Nil\n}\n\npub fn main() {\n  wibble(A, C, D, b: B)\n  wibble(A, C, D, b: B)\n  wibble(B, C, D, a: A)\n  wibble(B, C, a: A, d: D)\n  wibble(B, C, d: D, a: A)\n  wibble(B, D, a: A, c: C)\n  wibble(B, D, c: C, a: A)\n  wibble(C, D, b: B, a: A)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type A { A }
+type B { B }
+type C { C }
+type D { D }
+
+fn wibble(a a: A, b b: B, c c: C, d d: D) {
+  Nil
+}
+
+pub fn main() {
+  wibble(A, C, D, b: B)
+  wibble(A, C, D, b: B)
+  wibble(B, C, D, a: A)
+  wibble(B, C, a: A, d: D)
+  wibble(B, C, d: D, a: A)
+  wibble(B, D, a: A, c: C)
+  wibble(B, D, c: C, a: A)
+  wibble(C, D, b: B, a: A)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type a_c struct {}
+
+func (c a_c) Hash() uint32 {return gleam_P.NilHash }
+func (c a_c) Equal(o a_c) bool {
+  _ = o
+  return true
+}
+
+type a_t = a_c
+
+type b_c struct {}
+
+func (c b_c) Hash() uint32 {return gleam_P.NilHash }
+func (c b_c) Equal(o b_c) bool {
+  _ = o
+  return true
+}
+
+type b_t = b_c
+
+type c_c struct {}
+
+func (c c_c) Hash() uint32 {return gleam_P.NilHash }
+func (c c_c) Equal(o c_c) bool {
+  _ = o
+  return true
+}
+
+type c_t = c_c
+
+type d_c struct {}
+
+func (c d_c) Hash() uint32 {return gleam_P.NilHash }
+func (c d_c) Equal(o d_c) bool {
+  _ = o
+  return true
+}
+
+type d_t = d_c
+
+func wibble(a a_t, b b_t, c c_t, d d_t) gleam_P.Nil_t {
+  return gleam_P.Nil_c{}
+}
+
+func Main() gleam_P.Nil_t {
+  _ = wibble(a_c{}, b_c{}, c_c{}, d_c{})
+  _ = wibble(a_c{}, b_c{}, c_c{}, d_c{})
+  _ = wibble(a_c{}, b_c{}, c_c{}, d_c{})
+  _ = wibble(a_c{}, b_c{}, c_c{}, d_c{})
+  _ = wibble(a_c{}, b_c{}, c_c{}, d_c{})
+  _ = wibble(a_c{}, b_c{}, c_c{}, d_c{})
+  _ = wibble(a_c{}, b_c{}, c_c{}, d_c{})
+  return wibble(a_c{}, b_c{}, c_c{}, d_c{})
+}

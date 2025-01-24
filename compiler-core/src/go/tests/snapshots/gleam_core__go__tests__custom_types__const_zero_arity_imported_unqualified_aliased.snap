@@ -1,0 +1,23 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "import other.{Two as Three}\nconst a = Three\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+import other.{Two as Three}
+const a = Three
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  other_P "example.com/todo/thepackage/other"
+)
+
+const _ = gleam_P.Use_Import
+const _ = other_P.Use_Import
+const Use_Import byte = 0
+
+var a other_P.One_t = other_P.Two_c{}

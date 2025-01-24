@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "let wibble\n        wibble = 4"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 let wibble

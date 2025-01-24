@@ -286,6 +286,7 @@ where
                 ensure_gleam_module_does_not_overwrite_standard_erlang_module(&input)?;
             }
         }
+        // TODO: check if go needs something like this
 
         Ok(inputs.collection)
     }

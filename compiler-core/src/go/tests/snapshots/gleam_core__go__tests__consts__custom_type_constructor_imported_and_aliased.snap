@@ -1,0 +1,24 @@
+---
+source: compiler-core/src/go/tests/consts.rs
+expression: "import other_module.{A as B}\n\npub const local = B\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+import other_module.{A as B}
+
+pub const local = B
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  other_module_P "example.com/todo/package/other_module"
+)
+
+const _ = gleam_P.Use_Import
+const _ = other_module_P.Use_Import
+const Use_Import byte = 0
+
+var Local other_module_P.T_t = other_module_P.A_c{}

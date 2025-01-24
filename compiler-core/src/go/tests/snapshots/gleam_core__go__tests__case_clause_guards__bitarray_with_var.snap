@@ -1,0 +1,35 @@
+---
+source: compiler-core/src/go/tests/case_clause_guards.rs
+expression: "pub fn main() {\n  case 5 {\n    z if <<z>> == <<z>> -> Nil\n    _ -> Nil\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main() {
+  case 5 {
+    z if <<z>> == <<z>> -> Nil
+    _ -> Nil
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main() gleam_P.Nil_t {
+  var _a gleam_P.Int_t = 5
+  _ = _a
+  if gleam_P.Bool_t(gleam_P.ToBitArray(_a).Equal(gleam_P.ToBitArray(_a))) {
+    var z gleam_P.Int_t = _a
+    _ = z
+    return gleam_P.Nil_c{}
+  } else {
+    return gleam_P.Nil_c{}
+  }
+}

@@ -1,0 +1,32 @@
+---
+source: compiler-core/src/go/tests/blocks.rs
+expression: "\nfn b() {\n  let x = 1\n  {\n    let x = x\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn b() {
+  let x = 1
+  {
+    let x = x
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func b() gleam_P.Int_t {
+  var x gleam_P.Int_t = 1
+  _ = x
+  var xʹ1 gleam_P.Int_t = x
+  _ = xʹ1
+  return xʹ1
+}

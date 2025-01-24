@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\nlet my_string = \"hello\"\ncase my_string {\n    _ if length(my_string) > 2 -> io.debug(\"doesn't work')\n}"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

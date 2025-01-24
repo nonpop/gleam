@@ -1,0 +1,41 @@
+---
+source: compiler-core/src/go/tests/tuples.rs
+expression: "\nfn go(a) {\n  case a {\n    #(2, a) -> a\n    #(1, 1) -> 1\n    #(a, b) -> a + b\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(a) {
+  case a {
+    #(2, a) -> a
+    #(1, 1) -> 1
+    #(a, b) -> a + b
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ(a gleam_P.Tuple2_t[gleam_P.Int_t, gleam_P.Int_t]) gleam_P.Int_t {
+  if gleam_P.Bool_t(a.P_0.Equal(2)) {
+    var aʹ1 gleam_P.Int_t = a.P_1
+    _ = aʹ1
+    return aʹ1
+  } else if gleam_P.Bool_t(a.P_0.Equal(1)) && gleam_P.Bool_t(a.P_1.Equal(1)) {
+    return 1
+  } else {
+    var aʹ1 gleam_P.Int_t = a.P_0
+    _ = aʹ1
+    var b gleam_P.Int_t = a.P_1
+    _ = b
+    return aʹ1 + b
+  }
+}

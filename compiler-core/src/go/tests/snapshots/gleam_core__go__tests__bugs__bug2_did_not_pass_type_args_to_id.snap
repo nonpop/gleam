@@ -1,0 +1,29 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\nimport other\n\nfn id_id() {\n  other.id(other.id)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+import other
+
+fn id_id() {
+  other.id(other.id)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  other_P "example.com/todo/thepackage/other"
+)
+
+const _ = gleam_P.Use_Import
+const _ = other_P.Use_Import
+const Use_Import byte = 0
+
+func idId[N gleam_P.Type[N]]() gleam_P.Func1_t[N, N] {
+  return other_P.Id[gleam_P.Func1_t[N, N]](other_P.Id[N])
+}

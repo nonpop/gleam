@@ -1,0 +1,33 @@
+---
+source: compiler-core/src/go/tests/tuples.rs
+expression: "\nconst a = \"Hello\"\nconst b = 1\nconst c = 2.0\nconst e = #(\"bob\", \"dug\")\n        "
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+const a = "Hello"
+const b = 1
+const c = 2.0
+const e = #("bob", "dug")
+        
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var a gleam_P.String_t = "Hello"
+
+var b gleam_P.Int_t = 1
+
+var c gleam_P.Float_t = 2.0
+
+var e gleam_P.Tuple2_t[gleam_P.String_t, gleam_P.String_t] = gleam_P.Tuple2_t[
+  gleam_P.String_t,
+  gleam_P.String_t,
+]{"bob", "dug"}

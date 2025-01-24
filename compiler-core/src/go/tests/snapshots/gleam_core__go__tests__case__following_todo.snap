@@ -1,0 +1,39 @@
+---
+source: compiler-core/src/go/tests/case.rs
+expression: "\nfn go(x) {\n  case x {\n    True -> todo\n    _ -> 1\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x) {
+  case x {
+    True -> todo
+    _ -> 1
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ(x gleam_P.Bool_t) gleam_P.Int_t {
+  if x {
+    panic(gleam_P.MakeError(
+      "todo",
+      "my/mod",
+      4,
+      "go",
+      "`todo` expression evaluated. This code has not yet been implemented.",
+      map[string]any{},
+    ))
+  } else {
+    return 1
+  }
+}

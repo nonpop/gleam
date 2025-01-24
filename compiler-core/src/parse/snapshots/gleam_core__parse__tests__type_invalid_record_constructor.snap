@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\npub type User {\n    name: String,\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

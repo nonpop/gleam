@@ -1,0 +1,29 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "pub fn main(x) {\n  let #(x) = #(x)\n  x\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main(x) {
+  let #(x) = #(x)
+  x
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main[I gleam_P.Type[I]](x I) I {
+  var _a gleam_P.Tuple1_t[I] = gleam_P.Tuple1_t[I]{x}
+  _ = _a
+  var xʹ1 I = _a.P_0
+  _ = xʹ1
+  return xʹ1
+}

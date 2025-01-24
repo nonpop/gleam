@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\nfn main() {\n    case 1 {\n        -> -> 0\n    }\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

@@ -1,0 +1,33 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: "\n@external(go, \"tf\", \"TF\")\npub type TESTitem\n\n@external(go, \"it\", \"One\")\npub fn one(a: TESTitem) -> TESTitem\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "tf", "TF")
+pub type TESTitem
+
+@external(go, "it", "One")
+pub fn one(a: TESTitem) -> TESTitem
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  it_P "it"
+  tf_P "tf"
+)
+
+const _ = gleam_P.Use_Import
+const _ = it_P.Use_Import
+const _ = tf_P.Use_Import
+const Use_Import byte = 0
+
+type TESTitem_t = tf_P.TF
+
+func One(a TESTitem_t) TESTitem_t {
+  return it_P.One(a)
+}

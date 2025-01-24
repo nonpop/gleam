@@ -1,0 +1,34 @@
+---
+source: compiler-core/src/go/tests/case.rs
+expression: "\nfn go(x, y) {\n  case x {\n    0 -> y\n    _ -> y\n  }()\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x, y) {
+  case x {
+    0 -> y
+    _ -> y
+  }()
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[M gleam_P.Type[M]](x gleam_P.Int_t, y gleam_P.Func0_t[M]) M {
+  return (func() gleam_P.Func0_t[M] {
+    if gleam_P.Bool_t(x.Equal(0)) {
+      return y
+    } else {
+      return y
+    }
+  })()()
+}

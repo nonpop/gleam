@@ -1,0 +1,25 @@
+---
+source: compiler-core/src/go/tests/results.rs
+expression: "import gleam\npub fn main() { gleam.Ok }"
+snapshot_kind: text
+---
+----- SOURCE CODE
+import gleam
+pub fn main() { gleam.Ok }
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main[J gleam_P.Type[J], K gleam_P.Type[K]]() gleam_P.Func1_t[
+  J,
+  gleam_P.Result_t[J, K],
+] {
+  return func(P_0 J) gleam_P.Result_t[J, K] { return gleam_P.Ok_c[J, K]{P_0} }
+}

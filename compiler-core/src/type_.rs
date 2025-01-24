@@ -650,6 +650,7 @@ pub enum ValueConstructorVariant {
         implementations: Implementations,
         external_erlang: Option<(EcoString, EcoString)>,
         external_javascript: Option<(EcoString, EcoString)>,
+        external_go: Option<(EcoString, EcoString)>,
     },
 
     /// A constructor for a custom type
@@ -776,6 +777,8 @@ impl ValueConstructorVariant {
                 gleam: true,
                 can_run_on_erlang: true,
                 can_run_on_javascript: true,
+                can_run_on_go: true,
+                uses_go_externals: false,
                 uses_javascript_externals: false,
                 uses_erlang_externals: false,
             },

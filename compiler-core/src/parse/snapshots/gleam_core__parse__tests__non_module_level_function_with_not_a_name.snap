@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\npub fn main() {\n  fn @() { 1 }  // wrong token and not a name\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

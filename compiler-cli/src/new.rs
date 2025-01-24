@@ -31,6 +31,7 @@ pub enum Template {
     Lib,
     Erlang,
     JavaScript,
+    Go,
 }
 
 #[derive(Debug)]
@@ -79,6 +80,7 @@ impl FileToCreate {
         let skip_github = creator.options.skip_github;
         let gleam_version = creator.gleam_version;
         let target = match creator.options.template {
+            Template::Go => "target = \"go\"\n",
             Template::JavaScript => "target = \"javascript\"\n",
             Template::Lib | Template::Erlang => "",
         };
@@ -240,7 +242,7 @@ impl Creator {
         }
 
         match self.options.template {
-            Template::Lib | Template::Erlang | Template::JavaScript => {
+            Template::Lib | Template::Erlang | Template::JavaScript | Template::Go => {
                 for file in FileToCreate::iter() {
                     let path = file.location(self);
                     if let Some(contents) = file.contents(self) {

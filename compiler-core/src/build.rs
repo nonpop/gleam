@@ -62,11 +62,22 @@ pub enum Target {
     #[strum(serialize = "javascript", serialize = "js")]
     #[serde(rename = "javascript", alias = "js")]
     JavaScript,
+    #[strum(serialize = "go")]
+    #[serde(rename = "go")]
+    Go,
 }
 
 impl Target {
     pub fn variant_strings() -> Vec<EcoString> {
         Self::VARIANTS.iter().map(|s| (*s).into()).collect()
+    }
+
+    /// Returns `true` if the target is [`Go`].
+    ///
+    /// [`Go`]: Target::Go
+    #[must_use]
+    pub fn is_go(&self) -> bool {
+        matches!(self, Self::Go)
     }
 
     /// Returns `true` if the target is [`JavaScript`].
@@ -140,6 +151,9 @@ impl Default for Runtime {
 
 #[derive(Debug)]
 pub enum TargetCodegenConfiguration {
+    Go {
+        go_module_path: EcoString,
+    },
     JavaScript {
         emit_typescript_definitions: bool,
         prelude_location: Utf8PathBuf,
@@ -152,6 +166,7 @@ pub enum TargetCodegenConfiguration {
 impl TargetCodegenConfiguration {
     pub fn target(&self) -> Target {
         match self {
+            Self::Go { .. } => Target::Go,
             Self::JavaScript { .. } => Target::JavaScript,
             Self::Erlang { .. } => Target::Erlang,
         }

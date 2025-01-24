@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\nlet a = \"inner 'quotes'\"\n"
+snapshot_kind: text
 ---
 [
     Assignment(

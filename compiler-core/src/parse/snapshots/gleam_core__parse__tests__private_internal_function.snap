@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\n@internal\nfn wibble() { todo }\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

@@ -1,0 +1,35 @@
+---
+source: compiler-core/src/go/tests/recursion.rs
+expression: "\npub fn main(x) {\n  let z = {\n    let y = x\n    main(y - 1)\n  }\n  z\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn main(x) {
+  let z = {
+    let y = x
+    main(y - 1)
+  }
+  z
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main[J gleam_P.Type[J]](x gleam_P.Int_t) J {
+  var z J = (func() J {
+    var y gleam_P.Int_t = x
+    _ = y
+    return Main[J](y - 1)
+  })()
+  _ = z
+  return z
+}

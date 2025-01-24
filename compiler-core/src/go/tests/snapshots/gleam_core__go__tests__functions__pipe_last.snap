@@ -1,0 +1,32 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "fn id(x) { x }\npub fn main() {\n  1\n  |> id\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+fn id(x) { x }
+pub fn main() {
+  1
+  |> id
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func id[I gleam_P.Type[I]](x I) I {
+  return x
+}
+
+func Main() gleam_P.Int_t {
+  var _pipe gleam_P.Int_t = 1
+  _ = _pipe
+  return id[gleam_P.Int_t](_pipe)
+}

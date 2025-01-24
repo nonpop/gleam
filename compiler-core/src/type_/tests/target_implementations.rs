@@ -51,8 +51,10 @@ pub fn pure_gleam_2() { pure_gleam_1() * 2 }
                     gleam: true,
                     uses_erlang_externals: false,
                     uses_javascript_externals: false,
+                    uses_go_externals: false,
                     can_run_on_erlang: true,
                     can_run_on_javascript: true,
+                    can_run_on_go: true,
                 }
             ),
             (
@@ -61,8 +63,10 @@ pub fn pure_gleam_2() { pure_gleam_1() * 2 }
                     gleam: true,
                     uses_erlang_externals: false,
                     uses_javascript_externals: false,
+                    uses_go_externals: false,
                     can_run_on_erlang: true,
                     can_run_on_javascript: true,
+                    can_run_on_go: true,
                 }
             )
         ],
@@ -85,8 +89,10 @@ pub fn erlang_only_2() { erlang_only_1() * 2 }
                     gleam: false,
                     uses_erlang_externals: true,
                     uses_javascript_externals: false,
+                    uses_go_externals: false,
                     can_run_on_erlang: true,
                     can_run_on_javascript: false,
+                    can_run_on_go: false,
                 }
             ),
             (
@@ -95,8 +101,10 @@ pub fn erlang_only_2() { erlang_only_1() * 2 }
                     gleam: false,
                     uses_erlang_externals: true,
                     uses_javascript_externals: false,
+                    uses_go_externals: false,
                     can_run_on_erlang: true,
                     can_run_on_javascript: false,
+                    can_run_on_go: false,
                 }
             )
         ],
@@ -109,6 +117,7 @@ pub fn externals_only_function() {
         r#"
 @external(erlang, "wibble", "wobble")
 @external(javascript, "wibble", "wobble")
+@external(go, "webble", "Wabble")
 pub fn all_externals_1() -> Int
 
 pub fn all_externals_2() { all_externals_1() * 2 }
@@ -120,8 +129,10 @@ pub fn all_externals_2() { all_externals_1() * 2 }
                     gleam: false,
                     uses_erlang_externals: true,
                     uses_javascript_externals: true,
+                    uses_go_externals: true,
                     can_run_on_erlang: true,
                     can_run_on_javascript: true,
+                    can_run_on_go: true,
                 }
             ),
             (
@@ -130,8 +141,10 @@ pub fn all_externals_2() { all_externals_1() * 2 }
                     gleam: false,
                     uses_erlang_externals: true,
                     uses_javascript_externals: true,
+                    uses_go_externals: true,
                     can_run_on_erlang: true,
                     can_run_on_javascript: true,
+                    can_run_on_go: true,
                 }
             )
         ],
@@ -142,6 +155,9 @@ pub fn all_externals_2() { all_externals_1() * 2 }
 pub fn externals_with_pure_gleam_body() {
     assert_targets!(
         r#"
+@external(go, "webble", "Wabble")
+pub fn go_external_and_pure_body() -> Int { 1 + 1 }
+
 @external(javascript, "wibble", "wobble")
 pub fn javascript_external_and_pure_body() -> Int { 1 + 1 }
 
@@ -149,7 +165,7 @@ pub fn javascript_external_and_pure_body() -> Int { 1 + 1 }
 pub fn erlang_external_and_pure_body() -> Int { 1 + 1 }
 
 pub fn pure_gleam() {
-  javascript_external_and_pure_body() + erlang_external_and_pure_body()
+  go_external_and_pure_body() + javascript_external_and_pure_body() + erlang_external_and_pure_body()
 }
 "#,
         [
@@ -159,8 +175,22 @@ pub fn pure_gleam() {
                     gleam: true,
                     uses_erlang_externals: true,
                     uses_javascript_externals: false,
+                    uses_go_externals: false,
                     can_run_on_erlang: true,
                     can_run_on_javascript: true,
+                    can_run_on_go: true,
+                }
+            ),
+            (
+                "go_external_and_pure_body",
+                Implementations {
+                    gleam: true,
+                    uses_erlang_externals: false,
+                    uses_javascript_externals: false,
+                    uses_go_externals: true,
+                    can_run_on_erlang: true,
+                    can_run_on_javascript: true,
+                    can_run_on_go: true,
                 }
             ),
             (
@@ -169,8 +199,10 @@ pub fn pure_gleam() {
                     gleam: true,
                     uses_erlang_externals: false,
                     uses_javascript_externals: true,
+                    uses_go_externals: false,
                     can_run_on_erlang: true,
                     can_run_on_javascript: true,
+                    can_run_on_go: true,
                 }
             ),
             (
@@ -179,8 +211,10 @@ pub fn pure_gleam() {
                     gleam: true,
                     uses_erlang_externals: true,
                     uses_javascript_externals: true,
+                    uses_go_externals: true,
                     can_run_on_erlang: true,
                     can_run_on_javascript: true,
+                    can_run_on_go: true,
                 }
             )
         ],
@@ -206,8 +240,10 @@ pub fn all_externals() -> Int { erlang_external_and_javascript_body() }
                     gleam: false,
                     uses_erlang_externals: true,
                     uses_javascript_externals: true,
+                    uses_go_externals: false,
                     can_run_on_erlang: true,
                     can_run_on_javascript: true,
+                    can_run_on_go: false,
                 }
             ),
             (
@@ -216,8 +252,10 @@ pub fn all_externals() -> Int { erlang_external_and_javascript_body() }
                     gleam: false,
                     uses_erlang_externals: true,
                     uses_javascript_externals: true,
+                    uses_go_externals: false,
                     can_run_on_erlang: true,
                     can_run_on_javascript: true,
+                    can_run_on_go: false,
                 }
             ),
             (
@@ -226,8 +264,63 @@ pub fn all_externals() -> Int { erlang_external_and_javascript_body() }
                     gleam: false,
                     uses_erlang_externals: false,
                     uses_javascript_externals: true,
+                    uses_go_externals: false,
                     can_run_on_erlang: false,
                     can_run_on_javascript: true,
+                    can_run_on_go: false,
+                }
+            )
+        ],
+    );
+}
+
+#[test]
+pub fn erlang_external_with_go_body() {
+    assert_targets!(
+        r#"
+@external(go, "wibble", "Wobble")
+fn go_only() -> Int
+
+@external(erlang, "wibble", "wobble")
+pub fn erlang_external_and_go_body() -> Int { go_only() }
+
+pub fn all_externals() -> Int { erlang_external_and_go_body() }
+"#,
+        [
+            (
+                "all_externals",
+                Implementations {
+                    gleam: false,
+                    uses_erlang_externals: true,
+                    uses_javascript_externals: false,
+                    uses_go_externals: true,
+                    can_run_on_erlang: true,
+                    can_run_on_javascript: false,
+                    can_run_on_go: true,
+                }
+            ),
+            (
+                "erlang_external_and_go_body",
+                Implementations {
+                    gleam: false,
+                    uses_erlang_externals: true,
+                    uses_javascript_externals: false,
+                    uses_go_externals: true,
+                    can_run_on_erlang: true,
+                    can_run_on_javascript: false,
+                    can_run_on_go: true,
+                }
+            ),
+            (
+                "go_only",
+                Implementations {
+                    gleam: false,
+                    uses_erlang_externals: false,
+                    uses_javascript_externals: false,
+                    uses_go_externals: true,
+                    can_run_on_erlang: false,
+                    can_run_on_javascript: false,
+                    can_run_on_go: true,
                 }
             )
         ],
@@ -253,8 +346,10 @@ pub fn all_externals() -> Int { javascript_external_and_erlang_body() }
                     gleam: false,
                     uses_erlang_externals: true,
                     uses_javascript_externals: true,
+                    uses_go_externals: false,
                     can_run_on_erlang: true,
                     can_run_on_javascript: true,
+                    can_run_on_go: false,
                 }
             ),
             (
@@ -263,8 +358,10 @@ pub fn all_externals() -> Int { javascript_external_and_erlang_body() }
                     gleam: false,
                     uses_erlang_externals: true,
                     uses_javascript_externals: false,
+                    uses_go_externals: false,
                     can_run_on_erlang: true,
                     can_run_on_javascript: false,
+                    can_run_on_go: false,
                 }
             ),
             (
@@ -273,8 +370,10 @@ pub fn all_externals() -> Int { javascript_external_and_erlang_body() }
                     gleam: false,
                     uses_erlang_externals: true,
                     uses_javascript_externals: true,
+                    uses_go_externals: false,
                     can_run_on_erlang: true,
                     can_run_on_javascript: true,
+                    can_run_on_go: false,
                 }
             )
         ],

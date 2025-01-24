@@ -1,0 +1,27 @@
+---
+source: compiler-core/src/go/tests/blocks.rs
+expression: "\nfn b() {\n  {\n    1 + 2\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn b() {
+  {
+    1 + 2
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func b() gleam_P.Int_t {
+  return 1 + 2
+}

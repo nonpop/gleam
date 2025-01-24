@@ -1,0 +1,24 @@
+---
+source: compiler-core/src/go/tests/lists.rs
+expression: "\nconst a = []\nconst b = [1, 2, 3]\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+const a = []
+const b = [1, 2, 3]
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var a gleam_P.List_t[gleam_P.Type] = gleam_P.ToList[gleam_P.Type]()
+
+var b gleam_P.List_t[gleam_P.Int_t] = gleam_P.ToList[gleam_P.Int_t](1, 2, 3)

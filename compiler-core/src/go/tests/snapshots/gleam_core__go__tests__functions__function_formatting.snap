@@ -1,0 +1,27 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "\npub fn add(the_first_variable_that_should_be_added, the_second_variable_that_should_be_added) {\n  the_first_variable_that_should_be_added + the_second_variable_that_should_be_added\n}"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn add(the_first_variable_that_should_be_added, the_second_variable_that_should_be_added) {
+  the_first_variable_that_should_be_added + the_second_variable_that_should_be_added
+}
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Add(
+  theFirstVariableThatShouldBeAdded gleam_P.Int_t,
+  theSecondVariableThatShouldBeAdded gleam_P.Int_t,
+) gleam_P.Int_t {
+  return theFirstVariableThatShouldBeAdded + theSecondVariableThatShouldBeAdded
+}

@@ -1,0 +1,27 @@
+---
+source: compiler-core/src/go/tests/numbers.rs
+expression: "\nfn go() {\n  1 != 2\n  1 == 2\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  1 != 2
+  1 == 2
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.Bool_t {
+  _ = gleam_P.Bool_t(!1.Equal(2))
+  return gleam_P.Bool_t(1.Equal(2))
+}

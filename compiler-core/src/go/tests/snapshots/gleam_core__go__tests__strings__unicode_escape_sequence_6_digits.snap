@@ -1,0 +1,25 @@
+---
+source: compiler-core/src/go/tests/strings.rs
+expression: "\npub fn unicode_escape_sequence_6_digits() -> String {\n  \"\\u{10abcd}\"\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn unicode_escape_sequence_6_digits() -> String {
+  "\u{10abcd}"
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func UnicodeEscapeSequence6Digits() gleam_P.String_t {
+  return "\U0010abcd"
+}

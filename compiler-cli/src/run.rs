@@ -129,6 +129,13 @@ pub fn command(
             }
             Runtime::Bun => run_javascript_bun(&paths, &main_function.package, &module, arguments),
         },
+        Target::Go => match runtime {
+            Some(r) => Err(Error::InvalidRuntime {
+                target: Target::Go,
+                invalid_runtime: r,
+            }),
+            _ => run_go(&paths, &root_config.name, &module, arguments),
+        },
     }?;
 
     std::process::exit(status);
@@ -166,6 +173,96 @@ fn run_erlang(
     }
 
     ProjectIO::new().exec("erl", &args, &[], None, Stdio::Inherit)
+}
+
+fn run_go(
+    paths: &ProjectPaths,
+    package: &str,
+    module: &str,
+    arguments: Vec<String>,
+) -> Result<i32, Error> {
+    let mut args = vec!["run".to_string()];
+    let entry = write_go_entrypoint(paths, package, module)?;
+
+    args.push(entry.to_string());
+
+    for argument in arguments.into_iter() {
+        args.push(argument);
+    }
+
+    ProjectIO::new().exec("go1.24rc2", &args, &[], Some(&entry), Stdio::Inherit)
+}
+
+fn write_go_entrypoint(
+    paths: &ProjectPaths,
+    package: &str,
+    module: &str,
+) -> Result<Utf8PathBuf, Error> {
+    let proj_path = paths
+        .build_directory_for_target(Mode::Dev, Target::Go)
+        .to_path_buf();
+    let main_path = proj_path.join("main.go");
+
+    let module = format!(
+        r#"package main
+
+import {module}_P "example.com/todo/{package}/{module}"
+import "flag"
+import "log"
+import "os"
+import "runtime"
+import "runtime/pprof"
+import "strings"
+
+var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
+var memprofile = flag.String("memprofile", "", "write memory profile to file")
+
+func main() {{
+    flag.Parse()
+
+    for i := 0; i < len(os.Args); {{
+        if strings.HasPrefix(os.Args[i], "-cpuprofile=") {{
+            os.Args = append(os.Args[:i], os.Args[i+1:]...)
+            continue
+        }} else if strings.HasPrefix(os.Args[i], "-memprofile=") {{
+            os.Args = append(os.Args[:i], os.Args[i+1:]...)
+            continue
+        }}
+        i++
+    }}
+
+    if *cpuprofile != "" {{
+        log.Printf("Writing CPU profile data to %s\n", *cpuprofile)
+        f, err := os.Create(*cpuprofile)
+        if err != nil {{
+            log.Fatal("could not create CPU profile: ", err)
+        }}
+        defer f.Close()
+        if err := pprof.StartCPUProfile(f); err != nil {{
+            log.Fatal(err)
+        }}
+        defer pprof.StopCPUProfile()
+    }}
+
+    {module}_P.Main()
+
+    if *memprofile != "" {{
+        log.Printf("Writing memory profile data to %s\n", *memprofile)
+        f, err := os.Create(*memprofile)
+        if err != nil {{
+            log.Fatal(err)
+        }}
+        defer f.Close()
+        runtime.GC()
+        if err := pprof.WriteHeapProfile(f); err != nil {{
+            log.Fatal(err)
+        }}
+    }}
+}}
+"#,
+    );
+    crate::fs::write(&main_path, &module)?;
+    Ok(proj_path)
 }
 
 fn run_javascript_bun(

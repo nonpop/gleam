@@ -1,0 +1,45 @@
+---
+source: compiler-core/src/go/tests/use_.rs
+expression: "\npub fn main() {\n  use <- trip(1.0, \"\")\n  123\n}\n\nfn trip(x, y, f) {\n  let z = f()\n  #(x, y, z)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn main() {
+  use <- trip(1.0, "")
+  123
+}
+
+fn trip(x, y, f) {
+  let z = f()
+  #(x, y, z)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func trip[J gleam_P.Type[J], K gleam_P.Type[K], N gleam_P.Type[N]](
+  x J,
+  y K,
+  f gleam_P.Func0_t[N],
+) gleam_P.Tuple3_t[J, K, N] {
+  var z N = f()
+  _ = z
+  return gleam_P.Tuple3_t[J, K, N]{x, y, z}
+}
+
+func Main() gleam_P.Tuple3_t[gleam_P.Float_t, gleam_P.String_t, gleam_P.Int_t] {
+  return trip[gleam_P.Float_t, gleam_P.String_t, gleam_P.Int_t](
+    1.0,
+    "",
+    func() gleam_P.Int_t { return 123 },
+  )
+}

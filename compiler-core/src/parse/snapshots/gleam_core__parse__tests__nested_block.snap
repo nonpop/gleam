@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "{ 1 { 1.0 2.0 } 3 }"
+snapshot_kind: text
 ---
 [
     Expression(

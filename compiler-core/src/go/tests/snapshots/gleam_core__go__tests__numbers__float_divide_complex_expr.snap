@@ -1,0 +1,39 @@
+---
+source: compiler-core/src/go/tests/numbers.rs
+expression: "\nfn go() {\n  case 1.0 >=. 0.0 {\n    True -> 2.0\n    False -> 4.0\n  } /. 2.0\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  case 1.0 >=. 0.0 {
+    True -> 2.0
+    False -> 4.0
+  } /. 2.0
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.Float_t {
+  return gleam_P.DivideFloat(
+    (func() gleam_P.Float_t {
+      var _a gleam_P.Bool_t = 1.0 >= 0.0
+      _ = _a
+      if _a {
+        return 2.0
+      } else {
+        return 4.0
+      }
+    })(),
+    2.0,
+  )
+}

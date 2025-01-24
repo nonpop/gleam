@@ -1,0 +1,45 @@
+---
+source: compiler-core/src/go/tests/tuples.rs
+expression: "\nconst e = #(\n  \"loooooooooooooong\", \"loooooooooooong\", \"loooooooooooooong\",\n  \"loooooooooooooong\", \"loooooooooooong\", \"loooooooooooooong\",\n)\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+const e = #(
+  "loooooooooooooong", "loooooooooooong", "loooooooooooooong",
+  "loooooooooooooong", "loooooooooooong", "loooooooooooooong",
+)
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var e gleam_P.Tuple6_t[
+  gleam_P.String_t,
+  gleam_P.String_t,
+  gleam_P.String_t,
+  gleam_P.String_t,
+  gleam_P.String_t,
+  gleam_P.String_t,
+] = gleam_P.Tuple6_t[
+  gleam_P.String_t,
+  gleam_P.String_t,
+  gleam_P.String_t,
+  gleam_P.String_t,
+  gleam_P.String_t,
+  gleam_P.String_t,
+]{
+  "loooooooooooooong",
+  "loooooooooooong",
+  "loooooooooooooong",
+  "loooooooooooooong",
+  "loooooooooooong",
+  "loooooooooooooong",
+}

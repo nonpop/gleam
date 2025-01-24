@@ -1,0 +1,28 @@
+---
+source: compiler-core/src/go/tests/bit_arrays.rs
+expression: "\nfn go() {\n  let x = 4\n  <<256:size(x)>>\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  let x = 4
+  <<256:size(x)>>
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.BitArray_t {
+  var x gleam_P.Int_t = 4
+  _ = x
+  return gleam_P.ToBitArray(gleam_P.SizedInt(256, x, true))
+}

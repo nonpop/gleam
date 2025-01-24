@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\ncase 2, 3 {\n    x, y if x + y == 1 -> True\n}"
+snapshot_kind: text
 ---
 [
     Expression(

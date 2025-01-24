@@ -1,0 +1,38 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\nimport box\n\nfn foo(x) {\n    case 0 {\n        _ if x == box.Box(0) -> 1\n        _ -> 2\n    }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+import box
+
+fn foo(x) {
+    case 0 {
+        _ if x == box.Box(0) -> 1
+        _ -> 2
+    }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  box_P "example.com/todo/thepackage/box"
+)
+
+const _ = gleam_P.Use_Import
+const _ = box_P.Use_Import
+const Use_Import byte = 0
+
+func foo(x box_P.Box_t[gleam_P.Int_t]) gleam_P.Int_t {
+  var _a gleam_P.Int_t = 0
+  _ = _a
+  if gleam_P.Bool_t(x.Equal(box_P.Box_c[gleam_P.Int_t]{0})) {
+    return 1
+  } else {
+    return 2
+  }
+}

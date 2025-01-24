@@ -1022,55 +1022,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "40ecd4077b5ae9fd2e9e169b102c6c330d0605168eb0e8bf79952b256dbefffd"
 
 [[package]]
-name = "gleam"
-version = "1.7.0"
-dependencies = [
- "async-trait",
- "base16",
- "bytes",
- "camino",
- "clap",
- "ctrlc",
- "debug-ignore",
- "ecow",
- "flate2",
- "fs_extra",
- "fslock",
- "futures",
- "gleam-core",
- "hexpm",
- "hostname",
- "http",
- "ignore",
- "im",
- "insta",
- "itertools",
- "lsp-server",
- "lsp-types",
- "opener",
- "pretty_assertions",
- "pubgrub",
- "regex",
- "reqwest",
- "rpassword",
- "same-file",
- "serde",
- "serde_json",
- "sha2",
- "static_vcruntime",
- "strum",
- "tar",
- "tempfile",
- "termcolor",
- "tokio",
- "toml",
- "toml_edit",
- "tracing",
- "tracing-subscriber",
- "walkdir",
-]
-
-[[package]]
 name = "gleam-core"
 version = "1.7.0"
 dependencies = [
@@ -1123,6 +1074,55 @@ dependencies = [
  "unicode-segmentation",
  "vec1",
  "xxhash-rust",
+]
+
+[[package]]
+name = "gleam-go"
+version = "1.7.0"
+dependencies = [
+ "async-trait",
+ "base16",
+ "bytes",
+ "camino",
+ "clap",
+ "ctrlc",
+ "debug-ignore",
+ "ecow",
+ "flate2",
+ "fs_extra",
+ "fslock",
+ "futures",
+ "gleam-core",
+ "hexpm",
+ "hostname",
+ "http",
+ "ignore",
+ "im",
+ "insta",
+ "itertools",
+ "lsp-server",
+ "lsp-types",
+ "opener",
+ "pretty_assertions",
+ "pubgrub",
+ "regex",
+ "reqwest",
+ "rpassword",
+ "same-file",
+ "serde",
+ "serde_json",
+ "sha2",
+ "static_vcruntime",
+ "strum",
+ "tar",
+ "tempfile",
+ "termcolor",
+ "tokio",
+ "toml",
+ "toml_edit",
+ "tracing",
+ "tracing-subscriber",
+ "walkdir",
 ]
 
 [[package]]

@@ -1,0 +1,48 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "\ntype Mine {\n  Mine(a: Int, b: Int)\n}\n\nconst labels = Mine(b: 2, a: 1)\nconst no_labels = Mine(3, 4)\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Mine {
+  Mine(a: Int, b: Int)
+}
+
+const labels = Mine(b: 2, a: 1)
+const no_labels = Mine(3, 4)
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type mine_c struct {a gleam_P.Int_t; b gleam_P.Int_t}
+
+func (c mine_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.a.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  hh = c.b.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c mine_c) Equal(o mine_c) bool {
+  _ = o
+  if !c.a.Equal(o.a) { return false }
+  if !c.b.Equal(o.b) { return false }
+  return true
+}
+
+type mine_t = mine_c
+
+var labels mine_t = mine_c{1, 2}
+
+var noLabels mine_t = mine_c{3, 4}

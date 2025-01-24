@@ -1,0 +1,112 @@
+---
+source: compiler-core/src/go/tests/case.rs
+expression: "\ntype Wibble {\n  Wibble(Wobble)\n}\ntype Wobble {\n  Wobble(wabble: Wabble)\n}\ntype Wabble {\n  Wabble(tuple: #(Int, String))\n}\n\npub fn main() {\n  let tmp = Wibble(Wobble(Wabble(#(42, \"wibble\"))))\n  case tmp {\n    Wibble(Wobble(Wabble(#(_int, \"w\" as wibble <> rest)))) -> wibble <> rest\n    _ -> panic\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Wibble {
+  Wibble(Wobble)
+}
+type Wobble {
+  Wobble(wabble: Wabble)
+}
+type Wabble {
+  Wabble(tuple: #(Int, String))
+}
+
+pub fn main() {
+  let tmp = Wibble(Wobble(Wabble(#(42, "wibble"))))
+  case tmp {
+    Wibble(Wobble(Wabble(#(_int, "w" as wibble <> rest)))) -> wibble <> rest
+    _ -> panic
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  "strings"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type wibble_c struct {p_0 wobble_t}
+
+func (c wibble_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.p_0.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c wibble_c) Equal(o wibble_c) bool {
+  _ = o
+  if !c.p_0.Equal(o.p_0) { return false }
+  return true
+}
+
+type wibble_t = wibble_c
+
+type wobble_c struct {wabble wabble_t}
+
+func (c wobble_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.wabble.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c wobble_c) Equal(o wobble_c) bool {
+  _ = o
+  if !c.wabble.Equal(o.wabble) { return false }
+  return true
+}
+
+type wobble_t = wobble_c
+
+type wabble_c struct {tuple gleam_P.Tuple2_t[gleam_P.Int_t, gleam_P.String_t]}
+
+func (c wabble_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.tuple.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c wabble_c) Equal(o wabble_c) bool {
+  _ = o
+  if !c.tuple.Equal(o.tuple) { return false }
+  return true
+}
+
+type wabble_t = wabble_c
+
+func Main() gleam_P.String_t {
+  var tmp wibble_t = wibble_c{
+    wobble_c{
+      wabble_c{gleam_P.Tuple2_t[gleam_P.Int_t, gleam_P.String_t]{42, "wibble"}},
+    },
+  }
+  _ = tmp
+  if gleam_P.Bool_t(strings.HasPrefix(string(tmp.p_0.wabble.tuple.P_1), "w")) {
+    var rest gleam_P.String_t = tmp.p_0.wabble.tuple.P_1[1:]
+    _ = rest
+    var wibble gleam_P.String_t = "w"
+    _ = wibble
+    return wibble + rest
+  } else {
+    panic(gleam_P.MakeError(
+      "panic",
+      "my/mod",
+      16,
+      "main",
+      "`panic` expression evaluated.",
+      map[string]any{},
+    ))
+  }
+}

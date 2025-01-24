@@ -1,0 +1,41 @@
+---
+source: compiler-core/src/go/tests/use_.rs
+expression: "\npub fn main() {\n  let thingy = fn(f) { f() }\n  use <- thingy()\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn main() {
+  let thingy = fn(f) { f() }
+  use <- thingy()
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main[L gleam_P.Type[L]]() L {
+  var thingy gleam_P.Func1_t[gleam_P.Func0_t[L], L] = func(f gleam_P.Func0_t[L]) L {
+    return f()
+  }
+  _ = thingy
+  return thingy(
+    func() L {
+      panic(gleam_P.MakeError(
+        "todo",
+        "my/mod",
+        4,
+        "",
+        "`todo` expression evaluated. This code has not yet been implemented.",
+        map[string]any{},
+      ))
+    },
+  )
+}

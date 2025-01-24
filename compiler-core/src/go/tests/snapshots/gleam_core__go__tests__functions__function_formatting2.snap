@@ -1,0 +1,56 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "\npub fn add(x, y) {\nx + y\n}\n\npub fn long() {\n  add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, 1)))))))))))))))\n}"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn add(x, y) {
+x + y
+}
+
+pub fn long() {
+  add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, add(1, 1)))))))))))))))
+}
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Add(x gleam_P.Int_t, y gleam_P.Int_t) gleam_P.Int_t {
+  return x + y
+}
+
+func Long() gleam_P.Int_t {
+  return Add(
+    1,
+    Add(
+      1,
+      Add(
+        1,
+        Add(
+          1,
+          Add(
+            1,
+            Add(
+              1,
+              Add(
+                1,
+                Add(
+                  1,
+                  Add(1, Add(1, Add(1, Add(1, Add(1, Add(1, Add(1, 1))))))),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  )
+}

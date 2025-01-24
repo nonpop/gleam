@@ -1,0 +1,56 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "\ntype Thing {\n  Thing(func: Nil)\n}\n\npub fn main() {\n  let a = Thing(func: Nil)\n  let b = Thing(..a, func: Nil)\n  b.func\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Thing {
+  Thing(func: Nil)
+}
+
+pub fn main() {
+  let a = Thing(func: Nil)
+  let b = Thing(..a, func: Nil)
+  b.func
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type thing_c struct {funcʹ gleam_P.Nil_t}
+
+func (c thing_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.funcʹ.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c thing_c) Equal(o thing_c) bool {
+  _ = o
+  if !c.funcʹ.Equal(o.funcʹ) { return false }
+  return true
+}
+
+type thing_t = thing_c
+
+func Main() gleam_P.Nil_t {
+  var a thing_t = thing_c{gleam_P.Nil_c{}}
+  _ = a
+  var b thing_t = (func() thing_t {
+    var _record thing_t = a
+    _ = _record
+    return thing_c{gleam_P.Nil_c{}}
+  })()
+  _ = b
+  return b.funcʹ
+}

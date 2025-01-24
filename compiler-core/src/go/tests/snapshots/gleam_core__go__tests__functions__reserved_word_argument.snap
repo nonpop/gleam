@@ -1,0 +1,24 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "pub fn main(func) {\n  func\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main(func) {
+  func
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main[I gleam_P.Type[I]](funcʹ I) I {
+  return funcʹ
+}

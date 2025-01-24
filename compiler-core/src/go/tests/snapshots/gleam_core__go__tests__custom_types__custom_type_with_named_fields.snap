@@ -1,0 +1,125 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "\ntype Cat {\n  Cat(name: String, cuteness: Int)\n}\n\ntype Box {\n  Box(occupant: Cat)\n}\n\nconst felix = Cat(\"Felix\", 12)\nconst tom = Cat(cuteness: 1, name: \"Tom\")\n\nfn go() {\n  Cat(\"Nubi\", 1)\n  Cat(2, name: \"Nubi\")\n  Cat(cuteness: 3, name: \"Nubi\")\n}\n\nfn update(cat) {\n  Cat(..cat, name: \"Sid\")\n  Cat(..cat, name: \"Bartholemew Wonder Puss the Fourth !!!!!!!!!!!!!!!!\")\n  Cat(..new_cat(), name: \"Molly\")\n  let box = Box(occupant: cat)\n  Cat(..box.occupant, cuteness: box.occupant.cuteness + 1)\n}\n\nfn access(cat: Cat) {\n  cat.cuteness\n}\n\nfn new_cat() {\n  Cat(name: \"Beau\", cuteness: 11)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Cat {
+  Cat(name: String, cuteness: Int)
+}
+
+type Box {
+  Box(occupant: Cat)
+}
+
+const felix = Cat("Felix", 12)
+const tom = Cat(cuteness: 1, name: "Tom")
+
+fn go() {
+  Cat("Nubi", 1)
+  Cat(2, name: "Nubi")
+  Cat(cuteness: 3, name: "Nubi")
+}
+
+fn update(cat) {
+  Cat(..cat, name: "Sid")
+  Cat(..cat, name: "Bartholemew Wonder Puss the Fourth !!!!!!!!!!!!!!!!")
+  Cat(..new_cat(), name: "Molly")
+  let box = Box(occupant: cat)
+  Cat(..box.occupant, cuteness: box.occupant.cuteness + 1)
+}
+
+fn access(cat: Cat) {
+  cat.cuteness
+}
+
+fn new_cat() {
+  Cat(name: "Beau", cuteness: 11)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type cat_c struct {name gleam_P.String_t; cuteness gleam_P.Int_t}
+
+func (c cat_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.name.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  hh = c.cuteness.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c cat_c) Equal(o cat_c) bool {
+  _ = o
+  if !c.name.Equal(o.name) { return false }
+  if !c.cuteness.Equal(o.cuteness) { return false }
+  return true
+}
+
+type cat_t = cat_c
+
+type box_c struct {occupant cat_t}
+
+func (c box_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.occupant.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c box_c) Equal(o box_c) bool {
+  _ = o
+  if !c.occupant.Equal(o.occupant) { return false }
+  return true
+}
+
+type box_t = box_c
+
+func goʹ() cat_t {
+  _ = cat_c{"Nubi", 1}
+  _ = cat_c{"Nubi", 2}
+  return cat_c{"Nubi", 3}
+}
+
+func access(cat cat_t) gleam_P.Int_t {
+  return cat.cuteness
+}
+
+func newCat() cat_t {
+  return cat_c{"Beau", 11}
+}
+
+func update(cat cat_t) cat_t {
+  var _record cat_t = cat
+  _ = _record
+  _ = cat_c{"Sid", _record.cuteness}
+  var _recordʹ1 cat_t = cat
+  _ = _recordʹ1
+  _ = cat_c{
+    "Bartholemew Wonder Puss the Fourth !!!!!!!!!!!!!!!!",
+    _recordʹ1.cuteness,
+  }
+  var _recordʹ2 cat_t = newCat()
+  _ = _recordʹ2
+  _ = cat_c{"Molly", _recordʹ2.cuteness}
+  var box box_t = box_c{cat}
+  _ = box
+  var _recordʹ3 cat_t = box.occupant
+  _ = _recordʹ3
+  return cat_c{_recordʹ3.name, box.occupant.cuteness + 1}
+}
+
+var felix cat_t = cat_c{"Felix", 12}
+
+var tom cat_t = cat_c{"Tom", 1}

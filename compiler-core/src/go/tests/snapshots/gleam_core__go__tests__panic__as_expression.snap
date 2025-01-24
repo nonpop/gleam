@@ -1,0 +1,48 @@
+---
+source: compiler-core/src/go/tests/panic.rs
+expression: "\nfn go(f) {\n  let boop = panic\n  f(panic)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(f) {
+  let boop = panic
+  f(panic)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[M gleam_P.Type[M], N gleam_P.Type[N]](f gleam_P.Func1_t[N, M]) M {
+  var boop gleam_P.Type = (func() gleam_P.Type {
+    panic(gleam_P.MakeError(
+      "panic",
+      "my/mod",
+      3,
+      "go",
+      "`panic` expression evaluated.",
+      map[string]any{},
+    ))
+  })()
+  _ = boop
+  return f(
+    (func() N {
+      panic(gleam_P.MakeError(
+        "panic",
+        "my/mod",
+        4,
+        "go",
+        "`panic` expression evaluated.",
+        map[string]any{},
+      ))
+    })(),
+  )
+}

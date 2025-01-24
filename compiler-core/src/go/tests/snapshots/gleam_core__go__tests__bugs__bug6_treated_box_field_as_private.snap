@@ -1,0 +1,53 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\nimport box.{type Box, Box}\npub type BoxedString { BoxedString(box: Box(String)) }\n\nfn unbox(x: BoxedString) {\n    case x.box { Box(s) -> s }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+import box.{type Box, Box}
+pub type BoxedString { BoxedString(box: Box(String)) }
+
+fn unbox(x: BoxedString) {
+    case x.box { Box(s) -> s }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  box_P "example.com/todo/thepackage/box"
+)
+
+const _ = gleam_P.Use_Import
+const _ = box_P.Use_Import
+const Use_Import byte = 0
+
+type BoxedString_c struct {Box box_P.Box_t[gleam_P.String_t]}
+
+func (c BoxedString_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.Box.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c BoxedString_c) Equal(o BoxedString_c) bool {
+  _ = o
+  if !c.Box.Equal(o.Box) { return false }
+  return true
+}
+
+type BoxedString_t = BoxedString_c
+
+func unbox(x BoxedString_t) gleam_P.String_t {
+  var _a box_P.Box_t[gleam_P.String_t] = x.Box
+  _ = _a
+  {
+    var s gleam_P.String_t = _a.P_0
+    _ = s
+    return s
+  }
+}

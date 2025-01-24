@@ -1,0 +1,89 @@
+---
+source: compiler-core/src/go/tests/strings.rs
+expression: "\npub fn go(x) {\n  case \"Θ wibble wobble\" {\n    \"Θ\" <> rest -> rest\n    _ -> \"\"\n  }\n  case \"🫥 is neutral dotted\" {\n    \"🫥\" <> rest -> rest\n    _ -> \"\"\n  }\n  case \"🇺🇸 is a cluster\" {\n    \"🇺🇸\" <> rest -> rest\n    _ -> \"\"\n  }\n  case \"\\\" is a an escaped quote\" {\n    \"\\\"\" <> rest -> rest\n    _ -> \"\"\n  }\n  case \"\\\\ is a an escaped backslash\" {\n    \"\\\\\" <> rest -> rest\n    _ -> \"\"\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn go(x) {
+  case "Θ wibble wobble" {
+    "Θ" <> rest -> rest
+    _ -> ""
+  }
+  case "🫥 is neutral dotted" {
+    "🫥" <> rest -> rest
+    _ -> ""
+  }
+  case "🇺🇸 is a cluster" {
+    "🇺🇸" <> rest -> rest
+    _ -> ""
+  }
+  case "\" is a an escaped quote" {
+    "\"" <> rest -> rest
+    _ -> ""
+  }
+  case "\\ is a an escaped backslash" {
+    "\\" <> rest -> rest
+    _ -> ""
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  "strings"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Go[I gleam_P.Type[I]](x I) gleam_P.String_t {
+  var _a gleam_P.String_t = "Θ wibble wobble"
+  _ = _a
+  if gleam_P.Bool_t(strings.HasPrefix(string(_a), "Θ")) {
+    var rest gleam_P.String_t = _a[2:]
+    _ = rest
+    _ = rest
+  } else {
+    _ = ""
+  }
+  var _aʹ1 gleam_P.String_t = "🫥 is neutral dotted"
+  _ = _aʹ1
+  if gleam_P.Bool_t(strings.HasPrefix(string(_aʹ1), "🫥")) {
+    var rest gleam_P.String_t = _aʹ1[4:]
+    _ = rest
+    _ = rest
+  } else {
+    _ = ""
+  }
+  var _aʹ2 gleam_P.String_t = "🇺🇸 is a cluster"
+  _ = _aʹ2
+  if gleam_P.Bool_t(strings.HasPrefix(string(_aʹ2), "🇺🇸")) {
+    var rest gleam_P.String_t = _aʹ2[8:]
+    _ = rest
+    _ = rest
+  } else {
+    _ = ""
+  }
+  var _aʹ3 gleam_P.String_t = "\" is a an escaped quote"
+  _ = _aʹ3
+  if gleam_P.Bool_t(strings.HasPrefix(string(_aʹ3), "\"")) {
+    var rest gleam_P.String_t = _aʹ3[1:]
+    _ = rest
+    _ = rest
+  } else {
+    _ = ""
+  }
+  var _aʹ4 gleam_P.String_t = "\\ is a an escaped backslash"
+  _ = _aʹ4
+  if gleam_P.Bool_t(strings.HasPrefix(string(_aʹ4), "\\")) {
+    var rest gleam_P.String_t = _aʹ4[1:]
+    _ = rest
+    return rest
+  } else {
+    return ""
+  }
+}

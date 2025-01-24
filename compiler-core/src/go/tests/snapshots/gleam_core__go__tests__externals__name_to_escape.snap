@@ -1,0 +1,26 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: "\n@external(go, \"the/module\", \"One\")\nfn func() -> Nil\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "the/module", "One")
+fn func() -> Nil
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  module_P "the/module"
+)
+
+const _ = gleam_P.Use_Import
+const _ = module_P.Use_Import
+const Use_Import byte = 0
+
+func funcʹ() gleam_P.Nil_t {
+  return module_P.One()
+}

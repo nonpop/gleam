@@ -1,0 +1,45 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "\nconst a = True\n\nfn go() {\n  a\n  let a = 10\n  a + 20\n}\n\nfn second() {\n  let a = 10\n  a + 20\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+const a = True
+
+fn go() {
+  a
+  let a = 10
+  a + 20
+}
+
+fn second() {
+  let a = 10
+  a + 20
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func second() gleam_P.Int_t {
+  var aʹ1 gleam_P.Int_t = 10
+  _ = aʹ1
+  return aʹ1 + 20
+}
+
+var a gleam_P.Bool_t = true
+
+func goʹ() gleam_P.Int_t {
+  _ = a
+  var aʹ1 gleam_P.Int_t = 10
+  _ = aʹ1
+  return aʹ1 + 20
+}

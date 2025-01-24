@@ -1,0 +1,25 @@
+---
+source: compiler-core/src/go/tests/modules.rs
+expression: "import rocket_ship.{launch as boom_time}\npub fn go() { boom_time() }\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+import rocket_ship.{launch as boom_time}
+pub fn go() { boom_time() }
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  rocket_ship_P "example.com/todo/thepackage/rocket_ship"
+)
+
+const _ = gleam_P.Use_Import
+const _ = rocket_ship_P.Use_Import
+const Use_Import byte = 0
+
+func Go() gleam_P.Int_t {
+  return rocket_ship_P.Launch()
+}

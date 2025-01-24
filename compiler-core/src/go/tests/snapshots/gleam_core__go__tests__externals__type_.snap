@@ -1,0 +1,14 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: pub type Thing
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub type Thing
+
+----- COMPILED GO
+package mod_P
+
+const Use_Import byte = 0
+
+type Thing_t = any

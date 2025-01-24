@@ -1,0 +1,41 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "\npub const int = 42\npub const int_alias = int\npub fn use_int_alias() { int_alias }\n\npub const compound: #(Int, Int) = #(int, int_alias)\npub fn use_compound() { compound.0 + compound.1 }\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub const int = 42
+pub const int_alias = int
+pub fn use_int_alias() { int_alias }
+
+pub const compound: #(Int, Int) = #(int, int_alias)
+pub fn use_compound() { compound.0 + compound.1 }
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var Int gleam_P.Int_t = 42
+
+var IntAlias gleam_P.Int_t = Int
+
+func UseIntAlias() gleam_P.Int_t {
+  return IntAlias
+}
+
+var Compound gleam_P.Tuple2_t[gleam_P.Int_t, gleam_P.Int_t] = gleam_P.Tuple2_t[
+  gleam_P.Int_t,
+  gleam_P.Int_t,
+]{Int, IntAlias}
+
+func UseCompound() gleam_P.Int_t {
+  return Compound.P_0 + Compound.P_1
+}

@@ -1,0 +1,35 @@
+---
+source: compiler-core/src/go/tests/bit_arrays.rs
+expression: "\npub fn main() {\n  case <<>> {\n    <<\"a\", \"b\", _:bytes>> -> 1\n    _ -> 2\n  }\n}"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn main() {
+  case <<>> {
+    <<"a", "b", _:bytes>> -> 1
+    _ -> 2
+  }
+}
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main() gleam_P.Int_t {
+  var _a gleam_P.BitArray_t = gleam_P.ToBitArray()
+  _ = _a
+  if gleam_P.Bool_t(_a.ByteAt(0).Equal(0x61)) &&
+  gleam_P.Bool_t(_a.ByteAt(1).Equal(0x62)) &&
+  len(_a) >= 2 {
+    return 1
+  } else {
+    return 2
+  }
+}

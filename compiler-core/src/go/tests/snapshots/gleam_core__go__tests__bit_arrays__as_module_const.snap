@@ -1,0 +1,51 @@
+---
+source: compiler-core/src/go/tests/bit_arrays.rs
+expression: "\n          pub const data = <<\n            0x1,\n            2,\n            2:size(16),\n            0x4:size(32),\n            -1:32,\n            \"Gleam\":utf8,\n            4.2:float,\n            4.2:32-float,\n            -1:64,\n            <<\n              <<1, 2, 3>>:bits,\n              \"Gleam\":utf8,\n              1024\n            >>:bits\n          >>\n        "
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+          pub const data = <<
+            0x1,
+            2,
+            2:size(16),
+            0x4:size(32),
+            -1:32,
+            "Gleam":utf8,
+            4.2:float,
+            4.2:32-float,
+            -1:64,
+            <<
+              <<1, 2, 3>>:bits,
+              "Gleam":utf8,
+              1024
+            >>:bits
+          >>
+        
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var Data gleam_P.BitArray_t = gleam_P.ToBitArray(
+  []byte{1},
+  []byte{2},
+  []byte{0, 2},
+  []byte{0, 0, 0, 4},
+  []byte{255, 255, 255, 255},
+  gleam_P.StringBits("Gleam"),
+  gleam_P.SizedFloat(4.2, 64, true),
+  gleam_P.SizedFloat(4.2, 32, true),
+  gleam_P.SizedInt(-1, 64, true),
+  gleam_P.ToBitArray(
+    gleam_P.ToBitArray([]byte{1}, []byte{2}, []byte{3}).Buffer(),
+    gleam_P.StringBits("Gleam"),
+    []byte{0},
+  ).Buffer(),
+)

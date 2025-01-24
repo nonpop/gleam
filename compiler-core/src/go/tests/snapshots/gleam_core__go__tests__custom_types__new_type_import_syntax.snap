@@ -1,0 +1,29 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "\nimport a.{type A, A}\n\npub fn main() {\n  A\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+import a.{type A, A}
+
+pub fn main() {
+  A
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  a_P "example.com/todo/package/a"
+)
+
+const _ = gleam_P.Use_Import
+const _ = a_P.Use_Import
+const Use_Import byte = 0
+
+func Main() a_P.A_t {
+  return a_P.A_c{}
+}

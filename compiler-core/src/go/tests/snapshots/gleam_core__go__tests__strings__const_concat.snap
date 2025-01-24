@@ -1,0 +1,32 @@
+---
+source: compiler-core/src/go/tests/strings.rs
+expression: "\nconst cute = \"cute\"\nconst cute_bee = cute <> \"bee\"\n\npub fn main() {\n  cute_bee\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+const cute = "cute"
+const cute_bee = cute <> "bee"
+
+pub fn main() {
+  cute_bee
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var cute gleam_P.String_t = "cute"
+
+var cuteBee gleam_P.String_t = cute + "bee"
+
+func Main() gleam_P.String_t {
+  return cuteBee
+}

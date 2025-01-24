@@ -1,0 +1,40 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "\npub fn unwrap_or_panic(value) {\n  let assert Ok(inner) = value as \"Oops, there was an error\"\n  inner\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn unwrap_or_panic(value) {
+  let assert Ok(inner) = value as "Oops, there was an error"
+  inner
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func UnwrapOrPanic[K gleam_P.Type[K], L gleam_P.Type[L]](
+  value gleam_P.Result_t[K, L],
+) K {
+  if !value.IsOk() {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      3,
+      "unwrap_or_panic",
+      "Oops, there was an error",
+      map[string]any{"value": value },
+    ))
+  }
+  var inner K = value.AsOk().P_0
+  _ = inner
+  return inner
+}

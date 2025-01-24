@@ -1,0 +1,23 @@
+---
+source: compiler-core/src/go/tests/consts.rs
+expression: "pub const a = #(1, 2, 3)"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub const a = #(1, 2, 3)
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var A gleam_P.Tuple3_t[gleam_P.Int_t, gleam_P.Int_t, gleam_P.Int_t] = gleam_P.Tuple3_t[
+  gleam_P.Int_t,
+  gleam_P.Int_t,
+  gleam_P.Int_t,
+]{1, 2, 3}

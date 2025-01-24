@@ -1,0 +1,79 @@
+---
+source: compiler-core/src/go/tests/custom_types.rs
+expression: "\ntype Mine {\n    This\n    ThatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant\n}\n\nfn go() {\n    This\n    ThatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Mine {
+    This
+    ThatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant
+}
+
+fn go() {
+    This
+    ThatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type mine_t interface{
+  imine_t()
+  isThis() gleam_P.Bool_t
+  asThis() this_c
+  isThatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant() gleam_P.Bool_t
+  asThatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant() thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c
+  gleam_P.Type[mine_t]
+}
+
+type this_c struct {}
+
+func (this_c) imine_t() {}
+
+func (this_c) isThis() gleam_P.Bool_t { return true }
+func (c this_c) asThis() this_c { return c }
+
+func (this_c) isThatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant() gleam_P.Bool_t { return false }
+func (c this_c) asThatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant() thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c { panic("expected ThatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant value") }
+
+func (c this_c) Hash() uint32 { return gleam_P.HashConstructor(0) }
+func (c this_c) Equal(o mine_t) bool {
+  if o, ok := o.(this_c); ok {
+    _ = o
+    return true
+  }
+  return false
+}
+
+type thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c struct {}
+
+func (thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c) imine_t() {}
+
+func (thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c) isThis() gleam_P.Bool_t { return false }
+func (c thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c) asThis() this_c { panic("expected This value") }
+
+func (thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c) isThatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant() gleam_P.Bool_t { return true }
+func (c thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c) asThatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant() thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c { return c }
+
+func (c thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c) Hash() uint32 { return gleam_P.HashConstructor(1) }
+func (c thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c) Equal(o mine_t) bool {
+  if o, ok := o.(thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c); ok {
+    _ = o
+    return true
+  }
+  return false
+}
+
+func goʹ() mine_t {
+  _ = this_c{}
+  return thatOneIsAMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchMuchLongerVariant_c{}
+}

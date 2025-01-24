@@ -1,0 +1,36 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "\n        import wibble.{println}\n        pub fn main() {\n          let println =\n            \"oh dear\"\n            |> println\n          println\n        }"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+        import wibble.{println}
+        pub fn main() {
+          let println =
+            "oh dear"
+            |> println
+          println
+        }
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  wibble_P "example.com/todo/thepackage/wibble"
+)
+
+const _ = gleam_P.Use_Import
+const _ = wibble_P.Use_Import
+const Use_Import byte = 0
+
+func Main[N gleam_P.Type[N]]() N {
+  var printlnʹ1 N = (func() N {
+    var _pipe gleam_P.String_t = "oh dear"
+    _ = _pipe
+    return wibble_P.Println[N](_pipe)
+  })()
+  _ = printlnʹ1
+  return printlnʹ1
+}

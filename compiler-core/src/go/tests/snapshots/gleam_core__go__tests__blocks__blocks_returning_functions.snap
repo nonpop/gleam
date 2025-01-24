@@ -1,0 +1,37 @@
+---
+source: compiler-core/src/go/tests/blocks.rs
+expression: "\nfn b() {\n  {\n    fn(cb) { cb(1) }\n  }\n  {\n    fn(cb) { cb(2) }\n  }\n  3\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn b() {
+  {
+    fn(cb) { cb(1) }
+  }
+  {
+    fn(cb) { cb(2) }
+  }
+  3
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func b() gleam_P.Int_t {
+  _ = (func(cb gleam_P.Func1_t[gleam_P.Int_t, gleam_P.Type]) gleam_P.Type {
+    return cb(1)
+  })
+  _ = (func(cb gleam_P.Func1_t[gleam_P.Int_t, gleam_P.Type]) gleam_P.Type {
+    return cb(2)
+  })
+  return 3
+}

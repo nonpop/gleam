@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\n@internal\ntype Alias = Int\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

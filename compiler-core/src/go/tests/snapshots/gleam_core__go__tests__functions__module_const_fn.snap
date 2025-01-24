@@ -1,0 +1,45 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "\npub fn int_identity(i: Int) -> Int { i }\npub const int_identity_alias: fn(Int) -> Int = int_identity\npub fn use_int_identity_alias() { int_identity_alias(42) }\n\npub const compound: #(fn(Int) -> Int, fn(Int) -> Int) = #(int_identity, int_identity_alias)\npub fn use_compound() { compound.0(compound.1(42)) }"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn int_identity(i: Int) -> Int { i }
+pub const int_identity_alias: fn(Int) -> Int = int_identity
+pub fn use_int_identity_alias() { int_identity_alias(42) }
+
+pub const compound: #(fn(Int) -> Int, fn(Int) -> Int) = #(int_identity, int_identity_alias)
+pub fn use_compound() { compound.0(compound.1(42)) }
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func IntIdentity(i gleam_P.Int_t) gleam_P.Int_t {
+  return i
+}
+
+var IntIdentityAlias gleam_P.Func1_t[gleam_P.Int_t, gleam_P.Int_t] = IntIdentity
+
+func UseIntIdentityAlias() gleam_P.Int_t {
+  return IntIdentityAlias(42)
+}
+
+var Compound gleam_P.Tuple2_t[
+  gleam_P.Func1_t[gleam_P.Int_t, gleam_P.Int_t],
+  gleam_P.Func1_t[gleam_P.Int_t, gleam_P.Int_t],
+] = gleam_P.Tuple2_t[
+  gleam_P.Func1_t[gleam_P.Int_t, gleam_P.Int_t],
+  gleam_P.Func1_t[gleam_P.Int_t, gleam_P.Int_t],
+]{IntIdentity, IntIdentityAlias}
+
+func UseCompound() gleam_P.Int_t {
+  return Compound.P_0(Compound.P_1(42))
+}

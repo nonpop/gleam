@@ -1,0 +1,24 @@
+---
+source: compiler-core/src/go/tests/generics.rs
+expression: "pub fn identity(a) -> a {\n  a\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn identity(a) -> a {
+  a
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Identity[J gleam_P.Type[J]](a J) J {
+  return a
+}

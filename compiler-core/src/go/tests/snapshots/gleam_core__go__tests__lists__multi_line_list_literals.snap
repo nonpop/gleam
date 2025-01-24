@@ -1,0 +1,30 @@
+---
+source: compiler-core/src/go/tests/lists.rs
+expression: "\nfn go(x) {\n    [{True 1}]\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x) {
+    [{True 1}]
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[I gleam_P.Type[I]](x I) gleam_P.List_t[gleam_P.Int_t] {
+  return gleam_P.ToList[gleam_P.Int_t](
+    (func() gleam_P.Int_t {
+      _ = true
+      return 1
+    })(),
+  )
+}

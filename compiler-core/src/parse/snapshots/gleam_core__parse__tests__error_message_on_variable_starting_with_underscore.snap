@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\n  pub fn main() {\n    let val = _func_starting_with_underscore(1)\n  }"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

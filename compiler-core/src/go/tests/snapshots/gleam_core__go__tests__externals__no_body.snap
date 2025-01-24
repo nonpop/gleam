@@ -1,0 +1,26 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: "\n@external(go, \"one\", \"One\")\npub fn one(x: Int) -> Int\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "one", "One")
+pub fn one(x: Int) -> Int
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  one_P "one"
+)
+
+const _ = gleam_P.Use_Import
+const _ = one_P.Use_Import
+const Use_Import byte = 0
+
+func One(x gleam_P.Int_t) gleam_P.Int_t {
+  return one_P.One(x)
+}

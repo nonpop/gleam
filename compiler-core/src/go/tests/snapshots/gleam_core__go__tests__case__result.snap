@@ -1,0 +1,32 @@
+---
+source: compiler-core/src/go/tests/case.rs
+expression: "\nfn go(x) {\n  case x {\n    Ok(_) -> 1\n    Error(_) -> 0\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x) {
+  case x {
+    Ok(_) -> 1
+    Error(_) -> 0
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[N gleam_P.Type[N], O gleam_P.Type[O]](x gleam_P.Result_t[O, N]) gleam_P.Int_t {
+  if x.IsOk() {
+    return 1
+  } else {
+    return 0
+  }
+}

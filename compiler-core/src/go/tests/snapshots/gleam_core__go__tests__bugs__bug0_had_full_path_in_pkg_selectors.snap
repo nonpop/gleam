@@ -1,0 +1,45 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\nimport gleam/string_tree.{type StringTree}\n\npub fn inspect(term: anything) -> String {\n  do_inspect(term)\n  |> string_tree.to_string\n}\n\nfn do_inspect(term: anything) -> StringTree { todo }\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+import gleam/string_tree.{type StringTree}
+
+pub fn inspect(term: anything) -> String {
+  do_inspect(term)
+  |> string_tree.to_string
+}
+
+fn do_inspect(term: anything) -> StringTree { todo }
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  string_tree_P "example.com/todo/thepackage/gleam/string_tree"
+)
+
+const _ = gleam_P.Use_Import
+const _ = string_tree_P.Use_Import
+const Use_Import byte = 0
+
+func doInspect[L gleam_P.Type[L]](term L) string_tree_P.StringTree_t {
+  panic(gleam_P.MakeError(
+    "todo",
+    "my/mod",
+    9,
+    "do_inspect",
+    "`todo` expression evaluated. This code has not yet been implemented.",
+    map[string]any{},
+  ))
+}
+
+func Inspect[K gleam_P.Type[K]](term K) gleam_P.String_t {
+  var _pipe string_tree_P.StringTree_t = doInspect[K](term)
+  _ = _pipe
+  return string_tree_P.ToString(_pipe)
+}

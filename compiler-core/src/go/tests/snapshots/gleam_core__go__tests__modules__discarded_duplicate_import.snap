@@ -1,0 +1,34 @@
+---
+source: compiler-core/src/go/tests/modules.rs
+expression: "\nimport esa/rocket_ship\nimport nasa/rocket_ship as _nasa_rocket\npub fn go() { rocket_ship.go() }\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+-- esa/rocket_ship.gleam
+pub fn go() { 1 }
+
+-- nasa/rocket_ship.gleam
+pub fn go() { 1 }
+
+-- main.gleam
+
+import esa/rocket_ship
+import nasa/rocket_ship as _nasa_rocket
+pub fn go() { rocket_ship.go() }
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  rocket_ship_P "example.com/todo/thepackage/esa/rocket_ship"
+)
+
+const _ = gleam_P.Use_Import
+const _ = rocket_ship_P.Use_Import
+const Use_Import byte = 0
+
+func Go() gleam_P.Int_t {
+  return rocket_ship_P.Go()
+}

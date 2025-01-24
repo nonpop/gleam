@@ -3,10 +3,8 @@
   "search.exclude": {
     // Test snapshots
     "**/*.snap": true,
-
     // Generated code
     "compiler-core/generated/**": true,
-
     // Images
     "images/**": true
   },
@@ -29,5 +27,11 @@
     "Untar",
     "walkdir"
   ],
-  "cSpell.language": "en,uk,en-GB,en-US"
+  "cSpell.language": "en,uk,en-GB,en-US",
+  "rust-analyzer.checkOnSave": true,
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "makefile.configureOnOpen": false,
+  "go.toolsEnvVars": {
+    "GOEXPERIMENT": "aliastypeparams"
+  }
 }

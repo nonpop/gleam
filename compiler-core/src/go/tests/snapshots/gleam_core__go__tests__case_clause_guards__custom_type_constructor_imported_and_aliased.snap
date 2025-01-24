@@ -1,0 +1,38 @@
+---
+source: compiler-core/src/go/tests/case_clause_guards.rs
+expression: "import other_module.{A as B}\nfn func() {\n  case B {\n    x if x == B -> True\n    _ -> False\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+import other_module.{A as B}
+fn func() {
+  case B {
+    x if x == B -> True
+    _ -> False
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  other_module_P "example.com/todo/package/other_module"
+)
+
+const _ = gleam_P.Use_Import
+const _ = other_module_P.Use_Import
+const Use_Import byte = 0
+
+func funcʹ() gleam_P.Bool_t {
+  var _a other_module_P.T_t = other_module_P.A_c{}
+  _ = _a
+  if gleam_P.Bool_t(_a.Equal(other_module_P.A_c{})) {
+    var x other_module_P.T_t = _a
+    _ = x
+    return true
+  } else {
+    return false
+  }
+}

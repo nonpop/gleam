@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: fn()
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 fn()

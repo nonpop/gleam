@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "{ 2 + 3; - -5; }"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 { 2 + 3; - -5; }

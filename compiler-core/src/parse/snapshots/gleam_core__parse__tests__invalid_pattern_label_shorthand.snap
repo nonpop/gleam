@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\npub fn main() {\n  let Wibble(:) = todo\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

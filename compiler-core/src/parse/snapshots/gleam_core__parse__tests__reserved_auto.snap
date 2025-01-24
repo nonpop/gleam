@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: const auto = 1
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 const auto = 1

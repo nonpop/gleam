@@ -1,0 +1,33 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "pub fn main(f, _) {\n  f()\n  main(f, 1)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main(f, _) {
+  f()
+  main(f, 1)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main[K gleam_P.Type[K], L gleam_P.Type[L]](
+  loop_f gleam_P.Func0_t[L],
+  _ gleam_P.Int_t,
+) K {
+  for {
+    var f gleam_P.Func0_t[L] = loop_f
+    _ = f()
+    loop_f = f
+    _ = 1
+  }
+}

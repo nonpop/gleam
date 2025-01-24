@@ -436,6 +436,22 @@ pub enum Error {
         name: EcoString,
     },
 
+    /// A function's Go implementation has been given but it does not
+    /// have a valid Go package name.
+    InvalidExternalGoPackage {
+        location: SrcSpan,
+        module: EcoString,
+        name: EcoString,
+    },
+
+    /// A function's Go implementation has been given but it does not
+    /// have a valid function name.
+    InvalidExternalGoFunction {
+        location: SrcSpan,
+        function: EcoString,
+        name: EcoString,
+    },
+
     /// A case expression is missing one or more patterns to match all possible
     /// values of the type.
     InexhaustiveCaseExpression {
@@ -1035,6 +1051,8 @@ impl Error {
             | Error::UnsupportedExpressionTarget { location, .. }
             | Error::InvalidExternalJavascriptModule { location, .. }
             | Error::InvalidExternalJavascriptFunction { location, .. }
+            | Error::InvalidExternalGoPackage { location, .. }
+            | Error::InvalidExternalGoFunction { location, .. }
             | Error::InexhaustiveCaseExpression { location, .. }
             | Error::MissingCaseBody { location }
             | Error::InexhaustiveLetAssignment { location, .. }

@@ -1,0 +1,23 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: "\n@external(go, \"\", \"inspect\")\npub fn inspect(x: anything) -> Nil"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "", "inspect")
+pub fn inspect(x: anything) -> Nil
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Inspect[I gleam_P.Type[I]](x I) gleam_P.Nil_t {
+  return inspect[I](x)
+}

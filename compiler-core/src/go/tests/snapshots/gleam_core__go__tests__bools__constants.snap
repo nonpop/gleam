@@ -1,0 +1,27 @@
+---
+source: compiler-core/src/go/tests/bools.rs
+expression: "\nconst a = True\nconst b = False\nconst c = Nil\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+const a = True
+const b = False
+const c = Nil
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var a gleam_P.Bool_t = true
+
+var b gleam_P.Bool_t = false
+
+var c gleam_P.Nil_t = gleam_P.Nil_c{}

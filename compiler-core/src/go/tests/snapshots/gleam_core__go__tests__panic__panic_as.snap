@@ -1,0 +1,28 @@
+---
+source: compiler-core/src/go/tests/panic.rs
+expression: "\nfn go() {\n  let x = \"wibble\"\n  panic as x\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  let x = "wibble"
+  panic as x
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[J gleam_P.Type[J]]() J {
+  var x gleam_P.String_t = "wibble"
+  _ = x
+  panic(gleam_P.MakeError("panic", "my/mod", 4, "go", x, map[string]any{}))
+}

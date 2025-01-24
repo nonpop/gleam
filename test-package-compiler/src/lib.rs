@@ -33,6 +33,9 @@ pub fn prepare(path: &str) -> String {
             emit_typescript_definitions: config.javascript.typescript_declarations,
             prelude_location: Utf8PathBuf::from("../prelude.mjs"),
         },
+        Target::Go => TargetCodegenConfiguration::Go {
+            go_module_path: "example.com/todo".into(), // TODO
+        },
     };
 
     let ids = gleam_core::uid::UniqueIdGenerator::new();

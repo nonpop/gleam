@@ -1,0 +1,31 @@
+---
+source: compiler-core/src/go/tests/case_clause_guards.rs
+expression: "pub fn main(x, y) {\n  case x {\n    _ if !y && !x -> 0\n    _ -> 1\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main(x, y) {
+  case x {
+    _ if !y && !x -> 0
+    _ -> 1
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main(x gleam_P.Bool_t, y gleam_P.Bool_t) gleam_P.Int_t {
+  if !y && !x {
+    return 0
+  } else {
+    return 1
+  }
+}

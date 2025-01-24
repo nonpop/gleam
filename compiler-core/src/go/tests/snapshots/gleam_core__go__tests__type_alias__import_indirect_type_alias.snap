@@ -1,0 +1,31 @@
+---
+source: compiler-core/src/go/tests/type_alias.rs
+expression: "\nimport wobble\n\npub fn main(x: wobble.Wobble) {\n  Nil\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+import wobble
+
+pub fn main(x: wobble.Wobble) {
+  Nil
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  wibble_P "example.com/todo/wibble/wibble"
+  wobble_P "example.com/todo/wobble/wobble"
+)
+
+const _ = gleam_P.Use_Import
+const _ = wibble_P.Use_Import
+const _ = wobble_P.Use_Import
+const Use_Import byte = 0
+
+func Main(x wibble_P.Wibble_t) gleam_P.Nil_t {
+  return gleam_P.Nil_c{}
+}

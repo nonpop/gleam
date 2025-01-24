@@ -1,0 +1,34 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: "\n@external(go, \"one\", \"One\")\npub fn go() -> Nil\n\n@external(erlang, \"one\", \"one\")\npub fn erl() -> Nil\n\npub fn should_not_be_generated() {\n  go()\n  erl()\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "one", "One")
+pub fn go() -> Nil
+
+@external(erlang, "one", "one")
+pub fn erl() -> Nil
+
+pub fn should_not_be_generated() {
+  go()
+  erl()
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  one_P "one"
+)
+
+const _ = gleam_P.Use_Import
+const _ = one_P.Use_Import
+const Use_Import byte = 0
+
+func Go() gleam_P.Nil_t {
+  return one_P.One()
+}

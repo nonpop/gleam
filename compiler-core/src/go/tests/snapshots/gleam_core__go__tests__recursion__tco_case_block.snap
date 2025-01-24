@@ -1,0 +1,40 @@
+---
+source: compiler-core/src/go/tests/recursion.rs
+expression: "\npub fn main(x) {\n  case x {\n    0 -> Nil\n    _ -> {\n      let y = x\n      main(y - 1)\n    }\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn main(x) {
+  case x {
+    0 -> Nil
+    _ -> {
+      let y = x
+      main(y - 1)
+    }
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main(loop_x gleam_P.Int_t) gleam_P.Nil_t {
+  for {
+    var x gleam_P.Int_t = loop_x
+    if gleam_P.Bool_t(x.Equal(0)) {
+      return gleam_P.Nil_c{}
+    } else {
+      var y gleam_P.Int_t = x
+      _ = y
+      loop_x = y - 1
+    }
+  }
+}

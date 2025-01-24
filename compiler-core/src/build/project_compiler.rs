@@ -256,26 +256,57 @@ where
     }
 
     fn write_prelude(&self) -> Result<()> {
-        // Only the JavaScript target has a prelude to write.
-        if !self.target().is_javascript() {
-            return Ok(());
-        }
-
         let build = self
             .paths
             .build_directory_for_target(self.mode(), self.target());
 
-        // Write the JavaScript prelude
-        let path = build.join("prelude.mjs");
-        if !self.io.is_file(&path) {
-            self.io.write(&path, crate::javascript::PRELUDE)?;
-        }
-
-        // Write the TypeScript prelude, if asked for
-        if self.config.javascript.typescript_declarations {
-            let path = build.join("prelude.d.mts");
+        if self.target().is_javascript() {
+            // Write the JavaScript prelude
+            let path = build.join("prelude.mjs");
             if !self.io.is_file(&path) {
-                self.io.write(&path, crate::javascript::PRELUDE_TS_DEF)?;
+                self.io.write(&path, crate::javascript::PRELUDE)?;
+            }
+
+            // Write the TypeScript prelude, if asked for
+            if self.config.javascript.typescript_declarations {
+                let path = build.join("prelude.d.mts");
+                if !self.io.is_file(&path) {
+                    self.io.write(&path, crate::javascript::PRELUDE_TS_DEF)?;
+                }
+            }
+        } else if self.target().is_go() {
+            // Write the Go module files
+            let path = build.join("go.mod");
+            if !self.io.is_file(&path) {
+                self.io.write(
+                    &path,
+                    &format!(
+                        r#"module {}
+
+go 1.24rc2
+
+require golang.org/x/exp v0.0.0-20220518171630-0b5c67f07fdf
+"#,
+                        // self.config.go.module_path // TODO: why does this not work?
+                        "example.com/todo"
+                    ),
+                )?;
+            }
+
+            let path = build.join("go.sum");
+            if !self.io.is_file(&path) {
+                self.io.write(
+                    &path,
+                    r#"golang.org/x/exp v0.0.0-20220518171630-0b5c67f07fdf h1:oXVg4h2qJDd9htKxb5SCpFBHLipW6hXmL3qpUixS2jw=
+golang.org/x/exp v0.0.0-20220518171630-0b5c67f07fdf/go.mod h1:yh0Ynu2b5ZUe3MQfp2nM0ecK7wsgouWTDN0FNeJuIys=
+"#,
+                )?;
+            }
+
+            // Write the Go prelude
+            let path = build.join("gleam/gleam_generated.go");
+            if !self.io.is_file(&path) {
+                self.io.write(&path, crate::go::PRELUDE)?;
             }
         }
 
@@ -552,6 +583,10 @@ where
                 emit_typescript_definitions: self.config.javascript.typescript_declarations,
                 // This path is relative to each package output directory
                 prelude_location: Utf8PathBuf::from("../prelude.mjs"),
+            },
+
+            Target::Go => super::TargetCodegenConfiguration::Go {
+                go_module_path: "example.com/todo".into(), // TODO
             },
         };
 

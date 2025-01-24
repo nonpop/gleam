@@ -1,0 +1,93 @@
+---
+source: compiler-core/src/go/tests/lists.rs
+expression: "\nfn go(x, y) {\n  let assert [] = x\n  let assert [a] = x\n  let assert [1, 2] = x\n  let assert [_, #(3, b)] = y\n  let assert [head, ..tail] = y\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x, y) {
+  let assert [] = x
+  let assert [a] = x
+  let assert [1, 2] = x
+  let assert [_, #(3, b)] = y
+  let assert [head, ..tail] = y
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[O gleam_P.Type[O]](
+  x gleam_P.List_t[gleam_P.Int_t],
+  y gleam_P.List_t[gleam_P.Tuple2_t[gleam_P.Int_t, O]],
+) gleam_P.List_t[gleam_P.Tuple2_t[gleam_P.Int_t, O]] {
+  if !x.HasLength(0) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      3,
+      "go",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": x },
+    ))
+  }
+  if !x.HasLength(1) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      4,
+      "go",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": x },
+    ))
+  }
+  var a gleam_P.Int_t = x.Head()
+  _ = a
+  if 
+    !x.HasLength(2) ||
+    gleam_P.Bool_t(!x.Head().Equal(1)) ||
+    gleam_P.Bool_t(!x.Tail().Head().Equal(2)) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      5,
+      "go",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": x },
+    ))
+  }
+  if !y.HasLength(2) || gleam_P.Bool_t(!y.Tail().Head().P_0.Equal(3)) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      6,
+      "go",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": y },
+    ))
+  }
+  var b O = y.Tail().Head().P_1
+  _ = b
+  if !y.AtLeastLength(1) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      7,
+      "go",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": y },
+    ))
+  }
+  var head gleam_P.Tuple2_t[gleam_P.Int_t, O] = y.Head()
+  _ = head
+  var tail gleam_P.List_t[gleam_P.Tuple2_t[gleam_P.Int_t, O]] = y.Tail()
+  _ = tail
+  return y
+}

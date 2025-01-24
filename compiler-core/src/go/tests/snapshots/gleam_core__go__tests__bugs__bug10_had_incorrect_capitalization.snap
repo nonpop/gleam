@@ -1,0 +1,81 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\ntype Color { B BB }\n\nfn foo(x) {\n  case x {\n    BB -> 0\n    B -> 1\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Color { B BB }
+
+fn foo(x) {
+  case x {
+    BB -> 0
+    B -> 1
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type color_t interface{
+  icolor_t()
+  isB() gleam_P.Bool_t
+  asB() b_c
+  isBb() gleam_P.Bool_t
+  asBb() bb_c
+  gleam_P.Type[color_t]
+}
+
+type b_c struct {}
+
+func (b_c) icolor_t() {}
+
+func (b_c) isB() gleam_P.Bool_t { return true }
+func (c b_c) asB() b_c { return c }
+
+func (b_c) isBb() gleam_P.Bool_t { return false }
+func (c b_c) asBb() bb_c { panic("expected Bb value") }
+
+func (c b_c) Hash() uint32 { return gleam_P.HashConstructor(0) }
+func (c b_c) Equal(o color_t) bool {
+  if o, ok := o.(b_c); ok {
+    _ = o
+    return true
+  }
+  return false
+}
+
+type bb_c struct {}
+
+func (bb_c) icolor_t() {}
+
+func (bb_c) isB() gleam_P.Bool_t { return false }
+func (c bb_c) asB() b_c { panic("expected B value") }
+
+func (bb_c) isBb() gleam_P.Bool_t { return true }
+func (c bb_c) asBb() bb_c { return c }
+
+func (c bb_c) Hash() uint32 { return gleam_P.HashConstructor(1) }
+func (c bb_c) Equal(o color_t) bool {
+  if o, ok := o.(bb_c); ok {
+    _ = o
+    return true
+  }
+  return false
+}
+
+func foo(x color_t) gleam_P.Int_t {
+  if x.isBb() {
+    return 0
+  } else {
+    return 1
+  }
+}

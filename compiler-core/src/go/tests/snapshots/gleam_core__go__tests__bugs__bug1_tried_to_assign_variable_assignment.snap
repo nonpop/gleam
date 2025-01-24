@@ -1,0 +1,35 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\nfn inspect(x) { x }\n\nfn debug(term) {\n  term |> inspect\n  term\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn inspect(x) { x }
+
+fn debug(term) {
+  term |> inspect
+  term
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func inspect[I gleam_P.Type[I]](x I) I {
+  return x
+}
+
+func debug[N gleam_P.Type[N]](term N) N {
+  var _pipe N = term
+  _ = _pipe
+  _ = inspect[N](_pipe)
+  return term
+}

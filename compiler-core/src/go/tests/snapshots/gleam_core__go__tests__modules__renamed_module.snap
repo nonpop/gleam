@@ -1,0 +1,24 @@
+---
+source: compiler-core/src/go/tests/modules.rs
+expression: "\nimport x as y\nconst z = y.v\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+import x as y
+const z = y.v
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  y_P "example.com/todo/thepackage/x"
+)
+
+const _ = gleam_P.Use_Import
+const _ = y_P.Use_Import
+const Use_Import byte = 0
+
+var z gleam_P.Int_t = y_P.V

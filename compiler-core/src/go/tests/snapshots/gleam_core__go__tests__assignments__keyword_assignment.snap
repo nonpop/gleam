@@ -1,0 +1,30 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "\npub fn main() {\n  let var = 10\n  let func = 50\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn main() {
+  let var = 10
+  let func = 50
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main() gleam_P.Int_t {
+  var varʹ gleam_P.Int_t = 10
+  _ = varʹ
+  var funcʹ gleam_P.Int_t = 50
+  _ = funcʹ
+  return funcʹ
+}

@@ -1,0 +1,70 @@
+---
+source: compiler-core/src/go/tests/case_clause_guards.rs
+expression: "\n        pub type Person {\n          Person(username: String, name: String, age: Int)\n        }\n        pub fn main() {\n          let given_name = \"jack\"\n          let raiden = Person(\"raiden\", \"jack\", 31)\n          case given_name {\n            name if name == raiden.name -> \"It's jack\"\n            _ -> \"It's not jack\"\n          }\n        }\n        "
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+        pub type Person {
+          Person(username: String, name: String, age: Int)
+        }
+        pub fn main() {
+          let given_name = "jack"
+          let raiden = Person("raiden", "jack", 31)
+          case given_name {
+            name if name == raiden.name -> "It's jack"
+            _ -> "It's not jack"
+          }
+        }
+        
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type Person_c struct {
+  Username gleam_P.String_t
+  Name gleam_P.String_t
+  Age gleam_P.Int_t
+}
+
+func (c Person_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.Username.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  hh = c.Name.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  hh = c.Age.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c Person_c) Equal(o Person_c) bool {
+  _ = o
+  if !c.Username.Equal(o.Username) { return false }
+  if !c.Name.Equal(o.Name) { return false }
+  if !c.Age.Equal(o.Age) { return false }
+  return true
+}
+
+type Person_t = Person_c
+
+func Main() gleam_P.String_t {
+  var givenName gleam_P.String_t = "jack"
+  _ = givenName
+  var raiden Person_t = Person_c{"raiden", "jack", 31}
+  _ = raiden
+  if gleam_P.Bool_t(givenName.Equal(raiden.Name_f())) {
+    var name gleam_P.String_t = givenName
+    _ = name
+    return "It's jack"
+  } else {
+    return "It's not jack"
+  }
+}

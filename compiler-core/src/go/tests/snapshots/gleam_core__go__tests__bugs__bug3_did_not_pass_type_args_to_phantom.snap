@@ -1,0 +1,35 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\ntype Phantom(a) { Phantom }\n\nfn phantom() { Phantom }\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Phantom(a) { Phantom }
+
+fn phantom() { Phantom }
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type phantom_c[I gleam_P.Type[I]] struct {}
+
+func (c phantom_c[I]) Hash() uint32 {return gleam_P.NilHash }
+func (c phantom_c[I]) Equal(o phantom_c[I]) bool {
+  _ = o
+  return true
+}
+
+type phantom_t[I gleam_P.Type[I]] = phantom_c[I]
+
+func phantom[K gleam_P.Type[K]]() phantom_t[K] {
+  return phantom_c[K]{}
+}

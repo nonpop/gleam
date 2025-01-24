@@ -1,0 +1,36 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "pub fn main(f: fn(Int) -> Int) {\n  let func = fn(x, y) { f(x) + f(y) }\n  func\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub fn main(f: fn(Int) -> Int) {
+  let func = fn(x, y) { f(x) + f(y) }
+  func
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Main(f gleam_P.Func1_t[gleam_P.Int_t, gleam_P.Int_t]) gleam_P.Func2_t[
+  gleam_P.Int_t,
+  gleam_P.Int_t,
+  gleam_P.Int_t,
+] {
+  var funcʹ gleam_P.Func2_t[gleam_P.Int_t, gleam_P.Int_t, gleam_P.Int_t] = func(
+      x gleam_P.Int_t,
+      y gleam_P.Int_t,
+    ) gleam_P.Int_t {
+    return f(x) + f(y)
+  }
+  _ = funcʹ
+  return funcʹ
+}

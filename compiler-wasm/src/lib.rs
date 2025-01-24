@@ -117,8 +117,10 @@ pub fn compile_package(project_id: usize, target: &str) -> Result<(), String> {
     let target = match target.to_lowercase().as_str() {
         "erl" | "erlang" => Target::Erlang,
         "js" | "javascript" => Target::JavaScript,
+        "go" => Target::Go,
         _ => {
-            let msg = format!("Unknown target `{target}`, expected `erlang` or `javascript`");
+            let msg =
+                format!("Unknown target `{target}`, expected `erlang` or `javascript` or `go`");
             return Err(msg);
         }
     };
@@ -183,6 +185,9 @@ fn do_compile_package(project: Project, target: Target) -> Result<(), Error> {
         Target::JavaScript => TargetCodegenConfiguration::JavaScript {
             emit_typescript_definitions: false,
             prelude_location: Utf8PathBuf::from("./gleam_prelude.mjs"),
+        },
+        Target::Go => TargetCodegenConfiguration::Go {
+            go_module_path: "example.com/todo".into(), // TODO
         },
     };
 

@@ -1,0 +1,35 @@
+---
+source: compiler-core/src/go/tests/numbers.rs
+expression: "\nfn main(x) {\n  let assert 09_179.1 = x\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn main(x) {
+  let assert 09_179.1 = x
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func main(x gleam_P.Float_t) gleam_P.Float_t {
+  if gleam_P.Bool_t(!x.Equal(9_179.1)) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      3,
+      "main",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": x },
+    ))
+  }
+  return x
+}

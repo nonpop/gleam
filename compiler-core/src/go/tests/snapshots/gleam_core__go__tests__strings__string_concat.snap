@@ -1,0 +1,25 @@
+---
+source: compiler-core/src/go/tests/strings.rs
+expression: "\nfn go() {\n  \"Hello, \" <> \"Joe\"\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  "Hello, " <> "Joe"
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.String_t {
+  return "Hello, " + "Joe"
+}

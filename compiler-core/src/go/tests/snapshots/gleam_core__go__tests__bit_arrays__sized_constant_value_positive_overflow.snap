@@ -1,0 +1,26 @@
+---
+source: compiler-core/src/go/tests/bit_arrays.rs
+assertion_line: 137
+expression: "\nfn go() {\n  <<80_000:16>>\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  <<80_000:16>>
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.BitArray_t {
+  return gleam_P.ToBitArray([]byte{56, 128})
+}

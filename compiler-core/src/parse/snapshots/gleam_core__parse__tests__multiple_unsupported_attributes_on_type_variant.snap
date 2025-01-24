@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\ntype Wibble {\n    @external(erlang, \"one\", \"two\")\n    @target(erlang)\n    @internal\n    Wibble1\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

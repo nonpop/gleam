@@ -1,0 +1,44 @@
+---
+source: compiler-core/src/go/tests/blocks.rs
+expression: "\nfn go() {\n  let x = {\n    1\n    {\n      2\n      case True {\n        _ -> 3\n      }\n    }\n  }\n  x\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  let x = {
+    1
+    {
+      2
+      case True {
+        _ -> 3
+      }
+    }
+  }
+  x
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.Int_t {
+  var x gleam_P.Int_t = (func() gleam_P.Int_t {
+    _ = 1
+    _ = 2
+    var _a gleam_P.Bool_t = true
+    _ = _a
+    {
+      return 3
+    }
+  })()
+  _ = x
+  return x
+}

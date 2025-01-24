@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\npub fn main() {\n  add(_name, 1)\n}\n\nfn add(x, y) {\n  x + y\n}\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

@@ -1,0 +1,25 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: "\n@external(go, \"var\", \"Then\")\npub fn then(a: a) -> b"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "var", "Then")
+pub fn then(a: a) -> b
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  varʹ_P "var"
+)
+
+const _ = gleam_P.Use_Import
+const _ = varʹ_P.Use_Import
+const Use_Import byte = 0
+
+func Then[I gleam_P.Type[I], J gleam_P.Type[J]](a I) J {
+  return varʹ_P.Then[I, J](a)
+}

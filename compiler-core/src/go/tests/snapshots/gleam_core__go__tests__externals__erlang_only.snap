@@ -1,0 +1,28 @@
+---
+source: compiler-core/src/go/tests/externals.rs
+expression: "\npub fn should_be_generated(x: Int) -> Int {\n  x\n}\n\n@external(erlang, \"one\", \"one\")\npub fn should_not_be_generated(x: Int) -> Int\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn should_be_generated(x: Int) -> Int {
+  x
+}
+
+@external(erlang, "one", "one")
+pub fn should_not_be_generated(x: Int) -> Int
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func ShouldBeGenerated(x gleam_P.Int_t) gleam_P.Int_t {
+  return x
+}

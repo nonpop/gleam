@@ -1,0 +1,32 @@
+---
+source: compiler-core/src/go/tests/blocks.rs
+expression: "\nfn go() {\n  let x = {\n    {\n      3\n    }\n  }\n  x\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  let x = {
+    {
+      3
+    }
+  }
+  x
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.Int_t {
+  var x gleam_P.Int_t = 3
+  _ = x
+  return x
+}

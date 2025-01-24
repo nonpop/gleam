@@ -1,0 +1,28 @@
+---
+source: compiler-core/src/go/tests/functions.rs
+expression: "const func = 1\n\npub fn export() {\n  func\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+const func = 1
+
+pub fn export() {
+  func
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+var funcʹ gleam_P.Int_t = 1
+
+func Export() gleam_P.Int_t {
+  return funcʹ
+}

@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "\nconst a = [1, 2, <-]\n"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 

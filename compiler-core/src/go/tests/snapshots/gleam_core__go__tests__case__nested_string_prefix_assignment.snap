@@ -1,0 +1,68 @@
+---
+source: compiler-core/src/go/tests/case.rs
+expression: "\ntype Wibble {\n  Wibble(wobble: String)\n}\n\npub fn main() {\n  let tmp = Wibble(wobble: \"wibble\")\n  case tmp {\n    Wibble(wobble: \"w\" as wibble <> rest) -> wibble <> rest\n    _ -> panic\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type Wibble {
+  Wibble(wobble: String)
+}
+
+pub fn main() {
+  let tmp = Wibble(wobble: "wibble")
+  case tmp {
+    Wibble(wobble: "w" as wibble <> rest) -> wibble <> rest
+    _ -> panic
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+  "strings"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type wibble_c struct {wobble gleam_P.String_t}
+
+func (c wibble_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.wobble.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c wibble_c) Equal(o wibble_c) bool {
+  _ = o
+  if !c.wobble.Equal(o.wobble) { return false }
+  return true
+}
+
+type wibble_t = wibble_c
+
+func Main() gleam_P.String_t {
+  var tmp wibble_t = wibble_c{"wibble"}
+  _ = tmp
+  if gleam_P.Bool_t(strings.HasPrefix(string(tmp.wobble), "w")) {
+    var rest gleam_P.String_t = tmp.wobble[1:]
+    _ = rest
+    var wibble gleam_P.String_t = "w"
+    _ = wibble
+    return wibble + rest
+  } else {
+    panic(gleam_P.MakeError(
+      "panic",
+      "my/mod",
+      10,
+      "main",
+      "`panic` expression evaluated.",
+      map[string]any{},
+    ))
+  }
+}

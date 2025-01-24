@@ -1,0 +1,27 @@
+---
+source: compiler-core/src/go/tests/numbers.rs
+expression: "\nfn go() {\n  1.0 != 2.0\n  1.0 == 2.0\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go() {
+  1.0 != 2.0
+  1.0 == 2.0
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ() gleam_P.Bool_t {
+  _ = gleam_P.Bool_t(!1.0.Equal(2.0))
+  return gleam_P.Bool_t(1.0.Equal(2.0))
+}

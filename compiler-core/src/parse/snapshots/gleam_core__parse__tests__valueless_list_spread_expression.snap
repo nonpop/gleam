@@ -1,6 +1,7 @@
 ---
 source: compiler-core/src/parse/tests.rs
 expression: "let x = [1, 2, 3, ..]"
+snapshot_kind: text
 ---
 ----- SOURCE CODE
 let x = [1, 2, 3, ..]

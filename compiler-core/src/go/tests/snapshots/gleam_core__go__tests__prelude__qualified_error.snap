@@ -1,0 +1,23 @@
+---
+source: compiler-core/src/go/tests/prelude.rs
+expression: "import gleam\npub fn go() { gleam.Error(1) }\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+import gleam
+pub fn go() { gleam.Error(1) }
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Go[K gleam_P.Type[K]]() gleam_P.Result_t[K, gleam_P.Int_t] {
+  return gleam_P.Error_c[K, gleam_P.Int_t]{1}
+}

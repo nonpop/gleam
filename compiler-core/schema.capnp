@@ -134,8 +134,10 @@ struct Implementations {
   gleam @0 :Bool;
   usesErlangExternals @1 :Bool;
   usesJavascriptExternals @2 :Bool;
+  usesGoExternals @5 :Bool;
   canRunOnErlang @3 :Bool;
   canRunOnJavascript @4 :Bool;
+  canRunOnGo @6 :Bool;
 }
 
 struct ValueConstructorVariant {
@@ -158,6 +160,7 @@ struct ValueConstructorVariant {
       implementations @18 :Implementations;
       externalErlang @20 :Option(External);
       externalJavascript @21 :Option(External);
+      externalGo @22 :Option(External);
     }
 
     record :group {

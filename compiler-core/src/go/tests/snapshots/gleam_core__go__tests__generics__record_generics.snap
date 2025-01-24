@@ -1,0 +1,87 @@
+---
+source: compiler-core/src/go/tests/generics.rs
+expression: "pub type Animal(t) {\n  Cat(type_: t)\n  Dog(type_: t)\n}\n\npub fn main() {\n  Cat(type_: 6)\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+pub type Animal(t) {
+  Cat(type_: t)
+  Dog(type_: t)
+}
+
+pub fn main() {
+  Cat(type_: 6)
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type Animal_t[I gleam_P.Type[I]] interface{
+  iAnimal_t(I)
+  Type_f() I
+  IsCat() gleam_P.Bool_t
+  AsCat() Cat_c[I]
+  IsDog() gleam_P.Bool_t
+  AsDog() Dog_c[I]
+  gleam_P.Type[Animal_t[I]]
+}
+
+type Cat_c[I gleam_P.Type[I]] struct {Type I}
+
+func (Cat_c[I]) iAnimal_t(I) {}
+
+func (c Cat_c[I]) Type_f() I { return c.Type }
+
+func (Cat_c[I]) IsCat() gleam_P.Bool_t { return true }
+func (c Cat_c[I]) AsCat() Cat_c[I] { return c }
+
+func (Cat_c[I]) IsDog() gleam_P.Bool_t { return false }
+func (c Cat_c[I]) AsDog() Dog_c[I] { panic("expected Dog value") }
+
+func (c Cat_c[I]) Hash() uint32 { return gleam_P.HashConstructor(0, 
+  c.Type.Hash(),
+) }
+func (c Cat_c[I]) Equal(o Animal_t[I]) bool {
+  if o, ok := o.(Cat_c[I]); ok {
+    _ = o
+    if !c.Type.Equal(o.Type) { return false }
+    return true
+  }
+  return false
+}
+
+type Dog_c[I gleam_P.Type[I]] struct {Type I}
+
+func (Dog_c[I]) iAnimal_t(I) {}
+
+func (c Dog_c[I]) Type_f() I { return c.Type }
+
+func (Dog_c[I]) IsCat() gleam_P.Bool_t { return false }
+func (c Dog_c[I]) AsCat() Cat_c[I] { panic("expected Cat value") }
+
+func (Dog_c[I]) IsDog() gleam_P.Bool_t { return true }
+func (c Dog_c[I]) AsDog() Dog_c[I] { return c }
+
+func (c Dog_c[I]) Hash() uint32 { return gleam_P.HashConstructor(1, 
+  c.Type.Hash(),
+) }
+func (c Dog_c[I]) Equal(o Animal_t[I]) bool {
+  if o, ok := o.(Dog_c[I]); ok {
+    _ = o
+    if !c.Type.Equal(o.Type) { return false }
+    return true
+  }
+  return false
+}
+
+func Main() Animal_t[gleam_P.Int_t] {
+  return Cat_c[gleam_P.Int_t]{6}
+}

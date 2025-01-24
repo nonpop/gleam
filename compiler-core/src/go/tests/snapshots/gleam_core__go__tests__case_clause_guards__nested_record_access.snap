@@ -1,0 +1,95 @@
+---
+source: compiler-core/src/go/tests/case_clause_guards.rs
+expression: "\npub type A {\n  A(b: B)\n}\n\npub type B {\n  B(c: C)\n}\n\npub type C {\n  C(d: Bool)\n}\n\npub fn a(a: A) {\n  case a {\n    _ if a.b.c.d -> 1\n    _ -> 0\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub type A {
+  A(b: B)
+}
+
+pub type B {
+  B(c: C)
+}
+
+pub type C {
+  C(d: Bool)
+}
+
+pub fn a(a: A) {
+  case a {
+    _ if a.b.c.d -> 1
+    _ -> 0
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+type A_c struct {B B_t}
+
+func (c A_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.B.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c A_c) Equal(o A_c) bool {
+  _ = o
+  if !c.B.Equal(o.B) { return false }
+  return true
+}
+
+type A_t = A_c
+
+type B_c struct {C C_t}
+
+func (c B_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.C.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c B_c) Equal(o B_c) bool {
+  _ = o
+  if !c.C.Equal(o.C) { return false }
+  return true
+}
+
+type B_t = B_c
+
+type C_c struct {D gleam_P.Bool_t}
+
+func (c C_c) Hash() uint32 {
+  h := gleam_P.NewHash()
+  var hh uint32
+  hh = c.D.Hash()
+  if _, err := h.Write([]byte{byte(hh), byte(hh >> 8), byte(hh >> 16), byte(hh >> 24)}); err != nil { panic (err) }
+  return h.Sum32()
+}
+func (c C_c) Equal(o C_c) bool {
+  _ = o
+  if !c.D.Equal(o.D) { return false }
+  return true
+}
+
+type C_t = C_c
+
+func A(a A_t) gleam_P.Int_t {
+  if a.B_f().C_f().D_f() {
+    return 1
+  } else {
+    return 0
+  }
+}

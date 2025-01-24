@@ -1,0 +1,42 @@
+---
+source: compiler-core/src/go/tests/case.rs
+expression: "\nfn go(x, y) {\n  let z = False\n  case True {\n    x if #(x, z) == #(True, False) -> x\n    _ -> False\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x, y) {
+  let z = False
+  case True {
+    x if #(x, z) == #(True, False) -> x
+    _ -> False
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ[I gleam_P.Type[I], J gleam_P.Type[J]](x I, y J) gleam_P.Bool_t {
+  var z gleam_P.Bool_t = false
+  _ = z
+  var _a gleam_P.Bool_t = true
+  _ = _a
+  if gleam_P.Bool_t(gleam_P.Tuple2_t[gleam_P.Bool_t, gleam_P.Bool_t]{_a, z}.Equal(gleam_P.Tuple2_t[
+    gleam_P.Bool_t,
+    gleam_P.Bool_t,
+  ]{true, false})) {
+    var xʹ1 gleam_P.Bool_t = _a
+    _ = xʹ1
+    return xʹ1
+  } else {
+    return false
+  }
+}

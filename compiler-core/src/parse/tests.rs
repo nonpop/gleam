@@ -669,7 +669,7 @@ fn external_attribute_with_non_fn_definition() {
     assert_module_error!(
         r#"
 @external(erlang, "module", "fun")
-pub type Fun
+pub const wibble = 1
 "#
     );
 }

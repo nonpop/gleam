@@ -1,0 +1,35 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\n@external(go, \"example.com/todo/gleam_stdlib\", \"Dict\")\ntype Dict(k, v)\n\n@external(go, \"dict\", \"ToList\")\nfn external_to_list(dict: Dict(k, v)) -> List(#(k, v)) { todo }\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+@external(go, "example.com/todo/gleam_stdlib", "Dict")
+type Dict(k, v)
+
+@external(go, "dict", "ToList")
+fn external_to_list(dict: Dict(k, v)) -> List(#(k, v)) { todo }
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  dict_P "dict"
+  gleam_P "example.com/todo/gleam"
+  gleam_stdlib_P "example.com/todo/gleam_stdlib"
+)
+
+const _ = dict_P.Use_Import
+const _ = gleam_P.Use_Import
+const _ = gleam_stdlib_P.Use_Import
+const Use_Import byte = 0
+
+type dict_t[I gleam_P.Type[I], J gleam_P.Type[J]] = gleam_stdlib_P.Dict[I, J]
+
+func externalToList[K gleam_P.Type[K], L gleam_P.Type[L]](dict dict_t[K, L]) gleam_P.List_t[
+  gleam_P.Tuple2_t[K, L],
+] {
+  return dict_P.ToList[K, L](dict)
+}

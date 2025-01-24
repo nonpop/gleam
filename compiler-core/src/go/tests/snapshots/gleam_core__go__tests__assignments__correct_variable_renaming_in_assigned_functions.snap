@@ -1,0 +1,28 @@
+---
+source: compiler-core/src/go/tests/assignments.rs
+expression: "\npub fn debug(x) {\n  let x = x\n  fn(x) { x + 1 }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+pub fn debug(x) {
+  let x = x
+  fn(x) { x + 1 }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func Debug[I gleam_P.Type[I]](x I) gleam_P.Func1_t[gleam_P.Int_t, gleam_P.Int_t] {
+  var xʹ1 I = x
+  _ = xʹ1
+  return func(x gleam_P.Int_t) gleam_P.Int_t { return x + 1 }
+}

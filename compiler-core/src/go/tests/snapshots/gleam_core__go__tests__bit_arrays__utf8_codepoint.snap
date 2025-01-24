@@ -1,0 +1,28 @@
+---
+source: compiler-core/src/go/tests/bit_arrays.rs
+expression: "\nfn go(x) {\n  <<x:utf8_codepoint, \"Gleam\":utf8>>\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x) {
+  <<x:utf8_codepoint, "Gleam":utf8>>
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ(x gleam_P.UtfCodepoint_t) gleam_P.BitArray_t {
+  return gleam_P.ToBitArray(
+    gleam_P.CodepointBits(x),
+    gleam_P.StringBits("Gleam"),
+  )
+}

@@ -9,7 +9,7 @@ use crate::{
         package_loader::{CodegenRequired, PackageLoader, StaleTracker},
         Mode, Module, Origin, Outcome, Package, SourceFingerprint, Target,
     },
-    codegen::{Erlang, ErlangApp, JavaScript, TypeScriptDeclarations},
+    codegen::{Erlang, ErlangApp, Go, JavaScript, TypeScriptDeclarations},
     config::PackageConfig,
     dep_tree, error,
     io::{BeamCompiler, CommandExecutor, FileSystemReader, FileSystemWriter, Stdio},
@@ -193,7 +193,7 @@ where
 
         tracing::debug!("performing_code_generation");
 
-        if let Err(error) = self.perform_codegen(&modules) {
+        if let Err(error) = self.perform_codegen(existing_modules, &modules) {
             return error.into();
         }
 
@@ -297,13 +297,20 @@ where
         Ok(())
     }
 
-    fn perform_codegen(&mut self, modules: &[Module]) -> Result<()> {
+    fn perform_codegen(
+        &mut self,
+        existing_modules: &im::HashMap<EcoString, type_::ModuleInterface>,
+        modules: &[Module],
+    ) -> Result<()> {
         if !self.perform_codegen {
             tracing::debug!("skipping_codegen");
             return Ok(());
         }
 
         match self.target {
+            TargetCodegenConfiguration::Go { go_module_path } => {
+                self.perform_go_codegen(existing_modules, modules, &go_module_path)
+            }
             TargetCodegenConfiguration::JavaScript {
                 emit_typescript_definitions,
                 prelude_location,
@@ -380,6 +387,29 @@ where
 
         JavaScript::new(&self.out, typescript, prelude_location, self.target_support)
             .render(&self.io, modules)?;
+
+        if self.copy_native_files {
+            self.copy_project_native_files(&self.out, &mut written)?;
+        } else {
+            tracing::debug!("skipping_native_file_copying");
+        }
+
+        Ok(())
+    }
+
+    fn perform_go_codegen(
+        &mut self,
+        existing_modules: &im::HashMap<EcoString, type_::ModuleInterface>,
+        modules: &[Module],
+        go_module_path: &str,
+    ) -> Result<(), Error> {
+        let mut written = HashSet::new();
+
+        Go::new(&self.out, go_module_path, self.target_support).render(
+            &self.io,
+            existing_modules,
+            modules,
+        )?;
 
         if self.copy_native_files {
             self.copy_project_native_files(&self.out, &mut written)?;

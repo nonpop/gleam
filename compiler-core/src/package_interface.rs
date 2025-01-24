@@ -176,8 +176,10 @@ pub struct ImplementationsInterface {
     ///   gleam: true,
     ///   can_run_on_erlang: true,
     ///   can_run_on_javascript: true,
+    ///   can_run_on_go: true,
     ///   uses_erlang_externals: true,
     ///   uses_javascript_externals: false,
+    ///   uses_go_externals: false,
     /// }
     /// ```
     ///
@@ -187,11 +189,17 @@ pub struct ImplementationsInterface {
     ///   target.
     /// - `can_run_on_javascript: true` the function can be called on the JavaScript
     ///   target.
+    /// - `can_run_on_go: true` the function can be called on the Go
+    ///   target.
     /// - `uses_erlang_externals: true` means that the function will use Erlang
     ///   external code when compiled to the Erlang target.
     /// - `uses_javascript_externals: false` means that the function won't use
     ///   JavaScript external code when compiled to JavaScript. The function can
     ///   still be used on the JavaScript target since it has a pure Gleam
+    ///   implementation.
+    /// - `uses_go_externals: false` means that the function won't use
+    ///   Go external code when compiled to Go. The function can
+    ///   still be used on the Go target since it has a pure Gleam
     ///   implementation.
     gleam: bool,
     /// Set to `true` if the const/function is defined using Erlang external
@@ -216,8 +224,10 @@ pub struct ImplementationsInterface {
     ///   gleam: false,
     ///   can_run_on_erlang: false,
     ///   can_run_on_javascript: true,
+    ///   can_run_on_go: false,
     ///   uses_erlang_externals: false,
     ///   uses_javascript_externals: true,
+    ///   uses_go_externals: false,
     /// }
     /// ```
     ///
@@ -228,11 +238,19 @@ pub struct ImplementationsInterface {
     ///   target.
     /// - `can_run_on_javascript: true` the function can be called on the JavaScript
     ///   target.
+    /// - `can_run_on_go: false` the function cannot be called on the Go
+    ///   target.
     /// - `uses_erlang_externals: false` the function is not using external
     ///   Erlang code.
     /// - `uses_javascript_externals: true` the function is using JavaScript
     ///   external code.
+    /// - `uses_go_externals: false` the function is not using external
+    ///   Go code.
     uses_javascript_externals: bool,
+    /// Set to `true` if the const/function is defined using Go external
+    /// code. That means that the function will use Go code through FFI when
+    /// compiled for the Go target.
+    uses_go_externals: bool,
     /// Whether the function can be called on the Erlang target, either due to a
     /// pure Gleam implementation or an implementation that uses some Erlang
     /// externals.
@@ -241,6 +259,10 @@ pub struct ImplementationsInterface {
     /// to a pure Gleam implementation or an implementation that uses some
     /// JavaScript externals.
     can_run_on_javascript: bool,
+    /// Whether the function can be called on the Go target, either due
+    /// to a pure Gleam implementation or an implementation that uses some
+    /// Go externals.
+    can_run_on_go: bool,
 }
 
 impl ImplementationsInterface {
@@ -258,17 +280,21 @@ impl ImplementationsInterface {
             gleam,
             uses_erlang_externals,
             uses_javascript_externals,
+            uses_go_externals,
 
             can_run_on_erlang,
             can_run_on_javascript,
+            can_run_on_go,
         } = implementations;
 
         ImplementationsInterface {
             gleam: *gleam,
             uses_erlang_externals: *uses_erlang_externals,
             uses_javascript_externals: *uses_javascript_externals,
+            uses_go_externals: *uses_go_externals,
             can_run_on_erlang: *can_run_on_erlang,
             can_run_on_javascript: *can_run_on_javascript,
+            can_run_on_go: *can_run_on_go,
         }
     }
 }
@@ -398,6 +424,10 @@ impl ModuleInterface {
                     location: _,
                     name_location: _,
                     end_position: _,
+                    external_erlang: _,
+                    external_javascript: _,
+                    external_go: _,
+                    implementations: _,
                 }) => {
                     let mut id_map = IdMap::new();
 
@@ -509,6 +539,7 @@ impl ModuleInterface {
                     return_annotation: _,
                     external_erlang: _,
                     external_javascript: _,
+                    external_go: _,
                 }) => {
                     let mut id_map = IdMap::new();
                     let (_, name) = name

@@ -1,0 +1,74 @@
+---
+source: compiler-core/src/go/tests/bugs.rs
+expression: "\ntype AB { A B }\ntype XY { X Y }\n\nfn foo(ab, xy) {\n  case ab, xy {\n    A, X -> 1\n    _, _ -> 2\n  }\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+type AB { A B }
+type XY { X Y }
+
+fn foo(ab, xy) {
+  case ab, xy {
+    A, X -> 1
+    _, _ -> 2
+  }
+}
+
+
+----- COMPILED GO
+package mod_P
+
+const Use_Import byte = 0
+
+type ab_t interface{iab_t(); isA() bool; asA() a_c; isB() bool; asB() b_c}
+
+type a_c struct {}
+
+func (a_c) iab_t() {}
+
+func (a_c) isA() bool { return true }
+func (c a_c) asA() a_c { return c }
+
+func (a_c) isB() bool { return false }
+func (c a_c) asB() b_c { panic("expected B value") }
+
+type b_c struct {}
+
+func (b_c) iab_t() {}
+
+func (b_c) isA() bool { return false }
+func (c b_c) asA() a_c { panic("expected A value") }
+
+func (b_c) isB() bool { return true }
+func (c b_c) asB() b_c { return c }
+
+type xy_t interface{ixy_t(); isX() bool; asX() x_c; isY() bool; asY() y_c}
+
+type x_c struct {}
+
+func (x_c) ixy_t() {}
+
+func (x_c) isX() bool { return true }
+func (c x_c) asX() x_c { return c }
+
+func (x_c) isY() bool { return false }
+func (c x_c) asY() y_c { panic("expected Y value") }
+
+type y_c struct {}
+
+func (y_c) ixy_t() {}
+
+func (y_c) isX() bool { return false }
+func (c y_c) asX() x_c { panic("expected X value") }
+
+func (y_c) isY() bool { return true }
+func (c y_c) asY() y_c { return c }
+
+func foo(ab ab_t, xy xy_t) int64 {
+  if ab.isA() && xy.isX() {
+    return 1
+  } else {
+    return 2
+  }
+}

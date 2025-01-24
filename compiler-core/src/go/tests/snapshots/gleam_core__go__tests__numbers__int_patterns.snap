@@ -1,0 +1,35 @@
+---
+source: compiler-core/src/go/tests/numbers.rs
+expression: "\nfn go(x) {\n  let assert 4 = x\n}\n"
+snapshot_kind: text
+---
+----- SOURCE CODE
+
+fn go(x) {
+  let assert 4 = x
+}
+
+
+----- COMPILED GO
+package mod_P
+
+import (
+  gleam_P "example.com/todo/gleam"
+)
+
+const _ = gleam_P.Use_Import
+const Use_Import byte = 0
+
+func goʹ(x gleam_P.Int_t) gleam_P.Int_t {
+  if gleam_P.Bool_t(!x.Equal(4)) {
+    panic(gleam_P.MakeError(
+      "let_assert",
+      "my/mod",
+      3,
+      "go",
+      "Pattern match failed, no pattern matched the value.",
+      map[string]any{"value": x },
+    ))
+  }
+  return x
+}
